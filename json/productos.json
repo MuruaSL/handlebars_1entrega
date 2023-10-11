@@ -1,0 +1,171 @@
+[
+  {
+    "id": 1,
+    "title": "Laptop ASUS ZenBook Pro Duo",
+    "description": "Una potente laptop con pantalla táctil secundaria para productividad avanzada.",
+    "price": 1899.99,
+    "code": "ASUSZENBOOKPRO",
+    "stock": 150,
+    "status": true,
+    "thumbnails": [
+      "asus_zenbook_1.jpg",
+      "asus_zenbook_2.jpg"
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Monitor Dell Ultrasharp 4K",
+    "description": "Un monitor 4K con colores precisos para diseñadores y profesionales.",
+    "price": 799.99,
+    "code": "DELLULTRASHARP4K",
+    "stock": 120,
+    "status": true,
+    "thumbnails": [
+      "dell_ultrasharp_1.jpg",
+      "dell_ultrasharp_2.jpg"
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Tarjeta gráfica NVIDIA GeForce RTX 3080",
+    "description": "Una tarjeta gráfica de última generación para juegos y creación de contenido.",
+    "price": 799.99,
+    "code": "NVIDIARTX3080",
+    "stock": 60,
+    "status": true,
+    "thumbnails": [
+      "nvidia_rtx_3080_1.jpg",
+      "nvidia_rtx_3080_2.jpg"
+    ]
+  },
+  {
+    "id": 4,
+    "title": "Teclado mecánico Corsair K95 RGB Platinum",
+    "description": "Un teclado mecánico premium con retroiluminación RGB y teclas programables.",
+    "price": 169.99,
+    "code": "CORSAIRK95RGB",
+    "stock": 100,
+    "status": true,
+    "thumbnails": [
+      "corsair_k95_1.jpg",
+      "corsair_k95_2.jpg"
+    ]
+  },
+  {
+    "id": 5,
+    "title": "SSD Samsung 970 EVO NVMe M.2",
+    "description": "Un SSD de alta velocidad para mejorar el rendimiento de tu computadora.",
+    "price": 129.99,
+    "code": "SAMSUNG970EVO",
+    "stock": 200,
+    "status": true,
+    "thumbnails": [
+      "samsung_970_evo_1.jpg",
+      "samsung_970_evo_2.jpg"
+    ]
+  },
+  {
+    "id": 6,
+    "title": "Router inalámbrico TP-Link Archer C4000",
+    "description": "Un router de alto rendimiento con tecnología Wi-Fi 6 para una conectividad rápida y confiable.",
+    "price": 149.99,
+    "code": "TPLINKARCHERC4000",
+    "stock": 80,
+    "status": true,
+    "thumbnails": [
+      "tplink_archer_1.jpg",
+      "tplink_archer_2.jpg"
+    ]
+  },
+  {
+    "id": 7,
+    "title": "Impresora 3D Creality Ender 3",
+    "description": "Una impresora 3D asequible y de alta calidad para proyectos de prototipado y creación.",
+    "price": 229.99,
+    "code": "ENDER3PRINT",
+    "stock": 60,
+    "status": true,
+    "thumbnails": [
+      "creality_ender3_1.jpg",
+      "creality_ender3_2.jpg"
+    ]
+  },
+  {
+    "id": 8,
+    "title": "Auriculares inalámbricos Sony WH-1000XM4",
+    "description": "Auriculares con cancelación de ruido y sonido de alta resolución para amantes de la música.",
+    "price": 349.99,
+    "code": "SONYWH1000XM4",
+    "stock": 100,
+    "status": true,
+    "thumbnails": [
+      "sony_wh1000xm4_1.jpg",
+      "sony_wh1000xm4_2.jpg"
+    ]
+  },
+  {
+    "id": 9,
+    "title": "Mouse Logitech MX Master 3",
+    "description": "Un mouse ergonómico avanzado con seguimiento de alta precisión y múltiples botones programables.",
+    "price": 79.99,
+    "code": "LOGITECHMX3",
+    "stock": 150,
+    "status": true,
+    "thumbnails": [
+      "logitech_mx3_1.jpg",
+      "logitech_mx3_2.jpg"
+    ]
+  },
+  {
+    "id": 10,
+    "title": "Procesador AMD Ryzen 9 5900X",
+    "description": "Un procesador de alta gama con múltiples núcleos para rendimiento excepcional en juegos y aplicaciones.",
+    "price": 499.99,
+    "code": "AMD5900X",
+    "stock": 50,
+    "status": true,
+    "thumbnails": [
+      "amd_5900x_1.jpg",
+      "amd_5900x_2.jpg"
+    ]
+  },
+  {
+    "id": 11,
+    "title": "Teclado Logitech G Pro X Mechanical Gaming",
+    "description": "Un teclado mecánico para gaming con interruptores intercambiables y personalización avanzada.",
+    "price": 129.99,
+    "code": "LOGITECHGPROX",
+    "stock": 70,
+    "status": true,
+    "thumbnails": [
+      "logitech_g_pro_x_1.jpg",
+      "logitech_g_pro_x_2.jpg"
+    ]
+  },
+  {
+    "id": 12,
+    "title": "Monitor LG UltraGear 27GL83A-B",
+    "description": "Un monitor de juego de alta velocidad con resolución QHD y tecnología de sincronización G-Sync.",
+    "price": 349.99,
+    "code": "LG27GL83A",
+    "stock": 90,
+    "status": true,
+    "thumbnails": [
+      "lg_ultragear_1.jpg",
+      "lg_ultragear_2.jpg"
+    ]
+  },
+  {
+    "id": 13,
+    "title": "Antivirus McAfee Total Protection",
+    "description": "Protege tus dispositivos y datos con un antivirus completo y seguro.",
+    "price": 49.99,
+    "code": "MCAFEEPROTECT",
+    "stock": 200,
+    "status": true,
+    "thumbnails": [
+      "mcafee_protect_1.jpg",
+      "mcafee_protect_2.jpg"
+    ]
+  }
+]

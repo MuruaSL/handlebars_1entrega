@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>socket</h1>
+    <h1>Lista de Productos</h1>
+    <ul>
+        {{#each products}}
+            <li>
+                <h2>{{this.title}}</h2>
+                <p>{{this.description}}</p>
+                <p>Precio: {{this.price}}</p>
+                <p>Código: {{this.code}}</p>
+                <p>Stock: {{this.stock}}</p>
+            </li>
+        {{/each}}
+    </ul>
+    <script src="socket.io/socket.io.js"></script>
+    <script src="../../routes/realTimeProductsRouter.js"></script>
+</body>
+</html>
