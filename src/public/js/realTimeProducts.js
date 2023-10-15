@@ -23,4 +23,4 @@ socket.on('connection',()=>{
     console.log("cliente conectado")
 })
 
-socketSercer.emit("",)
+// socketServer.emit("",)
