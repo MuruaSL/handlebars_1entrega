@@ -1,4 +1,5 @@
 import ProductManager from '../logic/productManager.js';
+import { socketServer } from '../app.js';
 
 const productManager = new ProductManager('json/productos.json');
 
@@ -24,6 +25,7 @@ const { title, description, price, code,stock,thumbnails } = req.body;
 try {
     const newProduct = productManager.addProduct( title, description, price, code,stock,thumbnails);
     res.status(201).json(newProduct);
+    socketServer.emit('products',products)
 } catch (error) {
     res.status(400).json({ error: error.message });
 }

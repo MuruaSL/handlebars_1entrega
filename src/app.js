@@ -35,11 +35,6 @@ app.use('/api/carts', cartRouter);
 app.use('/', indexRouter);
 app.use('/realtimeproducts', realTimeProductsRouter(socketServer));
 
-// Actividades del socket
-socketServer.on('connection', (socket) => {
-    console.log('Nuevo cliente conectado');
-});
-
 // Iniciar el servidor
 const server = httpServer.listen(puerto, () => {
     console.log(`Escuchando en el puerto ${puerto}`);

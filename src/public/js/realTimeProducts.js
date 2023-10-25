@@ -1,12 +1,10 @@
 const socket = io(); // Esta línea instancia el socket del lado del cliente y se usará como puente con el servidor
 
-socket.on('productos-actualizados', (productos) => {
-    console.log("Productos actualizados:", productos);
-    renderProductList(productos); // Llama a la función para renderizar la lista de productos
-});
+document.addEventListener('DOMContentLoaded',function(){
 
 socket.on('connection', () => {
     console.log("Cliente conectado");
+    
 });
 
 function renderProductList(products) {
@@ -31,3 +29,4 @@ function renderProductList(products) {
     // Asignar el HTML al contenedor
     productListContainer.innerHTML = productListHTML;
 }
+})
