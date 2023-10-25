@@ -1,30 +1,23 @@
-import express from 'express';
-import ProductManager from '../logic/productManager.js';
-import { Server as SocketIOServer } from 'socket.io'; // Importa el módulo Socket.IO
-const productManager = new ProductManager('json/productos.json');
+import express from "express";
+import __dirname from "../utils.js";
+import ProductManager from "../logic/productManager.js";
+const productManager = new ProductManager("../../json/productos.json");
+const realTimeProductsRouter = (socketServer) => {
+  const router = express.Router();
 
+  // Define rutas y utiliza socketServer
+  router.get("/", (req, res) => {
+    const products = productManager.getProducts(); // Asegúrate de que productManager esté definido
+    res.render("realTimeProducts", { products });
+  });
 
-const realTimeProductsRouter = express.Router();
+  // Las actividades del socket se pueden definir aquí
+  socketServer.on("connection", (socket) => {
+    console.log("Nuevo cliente conectado");
+    // Realiza otras operaciones con el socket aquí
+  });
 
-realTimeProductsRouter.get('/', (req, res) => {
-    const products = productManager.getProducts();
-    res.render('realTimeProducts', { products });
-});
+  return router;
+};
 
-
-// io.on('connection', (socket) => {
-//     console.log('Un cliente se ha conectado');
-
-//     // Emitir la lista de productos cuando un cliente se conecte
-//     const products = productManager.getProducts();
-//     socket.emit('productos-actualizados', products);
-    
-//     socket.on('disconnect', () => {
-//         console.log('Un cliente se ha desconectado');
-//     });
-// });
-
-// Ruta para obtener la vista con la lista de productos en tiempo real
 export default realTimeProductsRouter;
-
-
