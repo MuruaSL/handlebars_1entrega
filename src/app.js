@@ -1,41 +1,49 @@
-import express from 'express';
-import path from 'path';
-import handlebars from 'express-handlebars'; // Asegúrate de importar 'express-handlebars'
-import bodyParser from 'body-parser';
-import productRouter from './routes/productRouter.js';
-import cartRouter from './routes/cartRouter.js';
-import indexRouter from './routes/indexRouter.js';
-import realTimeProductsRouter from './routes/realTimeProductsRouter.js';
-import { createServer } from 'http';
-import { Server } from 'socket.io';
-import __dirname from './utils.js';
+import express from "express";
+import handlebars from "express-handlebars";
+import __dirname from "./utils.js";
+import http from "http";
+import { Server as SocketIOServer } from "socket.io";
+import productManager from "./classes/productManager.js";
+
+// Routes
+import productRouter from "./routes/productRouter.js";
+import cartRouter from "./routes/cartRouter.js";
+import viewsRouter from "./routes/viewsRouter.js";
 
 const app = express();
-const puerto = 8080;
+const port = 8080;
 
-// Configuración de carpeta public
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Crear el servidor HTTP antes de crear la instancia de socketServer
-const httpServer = createServer(app);
-const socketServer = new Server(httpServer);
+app.engine("handlebars", handlebars.engine());
+app.set("views", __dirname + "/views");
+app.set("view engine", "handlebars");
+app.use(express.static(__dirname + "/public"));
 
-// Exportar socketServer para que sea accesible desde otros módulos
-export { socketServer };
+app.use("/", viewsRouter);
+app.use("/api/cart", cartRouter);
+app.use("/api/products", productRouter);
 
-// Configuración de handlebars / plantilla
-app.engine('handlebars', handlebars.engine()); // Declaro el motor
-app.set('views', path.join(__dirname, '/routes/views')); // Indico que la carpeta tiene las vistas
-app.set('view engine', 'handlebars'); // Declaración de las vistas y el motor
+const server = http.createServer(app);
+const io = new SocketIOServer(server);
+export {io}
+io.on("connection", (socket) => {
+  console.log(`Cliente conectado: ${socket.id}`);
+  socket.on('addProduct', (producto) => {
+    console.log(producto)
+    productManager.addProduct(producto);
+  });
+  socket.on('deleteProduct', (product_code) => {
+    console.log(product_code)
+    const product_id = productManager.getProductByCode(product_code)
+    productManager.deleteProduct(product_id);
+  });
+  socket.on("disconnect", () => {
+    console.log(`Cliente desconectado: ${socket.id}`);
+  });
+});
 
-// Declaración de ruteos
-app.use(bodyParser.json());
-app.use('/api/products', productRouter);
-app.use('/api/carts', cartRouter);
-app.use('/', indexRouter);
-app.use('/realtimeproducts', realTimeProductsRouter(socketServer));
-
-// Iniciar el servidor
-const server = httpServer.listen(puerto, () => {
-    console.log(`Escuchando en el puerto ${puerto}`);
+server.listen(port, () => {
+	console.log(`😎 Listening on port ${port} 😎`);
 });

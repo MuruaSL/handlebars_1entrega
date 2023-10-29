@@ -1,0 +1,33 @@
+<h1>Lista de Productos - Agregar Producto</h1>
+  <form id="productForm">
+    <input type="text" name="title" id="title" placeholder="Título del producto" />
+    <input type="text" name="description" id="description" placeholder="Descripción" />
+    <input type="number" name="price" id="price" placeholder="Precio" />
+    <input type="text" name="code" id="code" placeholder="Código" />
+    <input type="number" name="stock" id="stock" placeholder="Stock" />
+    <input type="text" name="category" id="category" placeholder="Categoría" />
+    <input type="text" name="thumbnails" id="thumbnails" placeholder="URL de la imagen" />
+    <button type="submit">Crear Producto</button>
+  </form>
+<br>
+  <h1>Lista de Productos - Eliminar Producto</h1>
+  <form id="deleteProductForm">
+    <input type="text" name="code" id="code" placeholder="Código" />
+    <button type="submit">Eliminar Producto</button>
+  </form>
+<br>
+  <ul id="productList">
+    {{#each products}}
+      <li>
+        <h2>{{this.title}}</h2>
+        <p>{{this.description}}</p>
+        <p>Precio: {{this.price}}</p>
+        <p>Código: {{this.code}}</p>
+        <p>Stock: {{this.stock}}</p>
+        <p>Status: {{this.status}}</p>
+        <p>Categoria: {{this.category}}</p>
+      </li>
+    {{/each}}
+  </ul>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/index.js"></script>

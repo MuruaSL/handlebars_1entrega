@@ -1,9 +1,26 @@
-import express from 'express'
+import express from "express";
+import productManager from "../classes/productManager.js";
 
-const router = express.Router()
+const viewsRoutes = express.Router();
 
-router.get('/',(req,res)=>{
-    res.render('index',{})
-})
+viewsRoutes.get("/", async (req, res) => {
+  try {
+    const products = await productManager.getProducts();
+    res.render("home", { products });
+  } catch (error) {
+    console.error("Error en la ruta principal:", error);
+    res.status(500).send("Error interno del servidor: " + error.message);
+  }
+});
 
-export default router
+viewsRoutes.get("/realTimeProducts", async (req, res) => {
+  try {
+    const products = await productManager.getProducts();
+    res.render("realTimeProducts", { products });
+  } catch (error) {
+    console.error("Error en la realTimeProducts:", error);
+    res.status(500).send("Error interno del servidor: " + error.message);
+  }
+});
+
+export default viewsRoutes;
