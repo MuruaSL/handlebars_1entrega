@@ -31,20 +31,24 @@ app.use("/api/products", productRouter);
 
 const server = http.createServer(app);
 const io = new SocketIOServer(server);
-export {io}
+
 io.on("connection", (socket) => {
   console.log(`Cliente conectado: ${socket.id}`);
 
   socket.on('addProduct', (producto) => {
     console.log(producto)
-    productManager.addProduct(producto);
     productManagerMongoose.addProduct(producto)
+    // productManager.addProduct(producto);
   });
 
   socket.on('deleteProduct', (product_code) => {
-    console.log(product_code)
-    const product_id = productManager.getProductByCode(product_code)
-    productManager.deleteProduct(product_id);
+    //mongoose
+    const mongoose_product = productManagerMongoose.getProductByCode(product_code)
+    productManagerMongoose.deleteProductById(mongoose_product.__id)
+    // fs
+    // const fs_id = productManager.getProductByCode(product_code)
+    // productManager.deleteProduct(fs_id);
+
   });
 
   socket.on("disconnect", () => {
@@ -61,7 +65,7 @@ const mongoDBName = 'ecommerse'
 mongoose.connect(mongoURL,{dbName:mongoDBName})
     .then(() => {
         console.log('db conectada')
-        app.listen(port,()=>{
+        server.listen(port,()=>{
             console.log('escuchando en 8080')
         })
     })

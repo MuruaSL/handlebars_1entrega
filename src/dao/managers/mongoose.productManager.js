@@ -23,8 +23,6 @@ class ProductManagerMongoose {
     }
   }
 
-  // Implementar otros métodos para actualizar, obtener y eliminar productos utilizando Mongoose
-
   async getProducts() {
     try {
       const products = await productsModel.find().exec();
@@ -34,11 +32,26 @@ class ProductManagerMongoose {
     }
   }
 
-  async getProductById(searchedID) {
+  async getProductByCode(searchedCode) {
     try {
-      const product = await productsModel.findOne({ id: searchedID }).exec();
+      const product = await productsModel.findOne({ code: searchedCode }).exec();
       if (product) {
         return product;
+      } else {
+        throw new Error("Producto no encontrado");
+      }
+    } catch (error) {
+      throw new Error("Error al obtener el producto por code: " + error.message);
+    }
+  }
+
+  async deleteProductById(product_id) {
+    try {
+      const product = await productsModel.findOne({ id: product_id }).exec();
+      const id = product._id 
+      if (product) {
+        await productsModel.deleteOne({ _id: id });
+
       } else {
         throw new Error("Producto no encontrado");
       }
@@ -46,9 +59,8 @@ class ProductManagerMongoose {
       throw new Error("Error al obtener el producto por ID: " + error.message);
     }
   }
-
-  // Implementar otros métodos para actualizar, eliminar y realizar otras operaciones con productos
 }
+
 
 const productManagerMongoose = new ProductManagerMongoose();
 

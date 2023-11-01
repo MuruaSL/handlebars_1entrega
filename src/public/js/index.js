@@ -1,5 +1,3 @@
-import { io } from "../../app.js";
-
 const socket = io()
 
 //rescatar informacion de la pagina realTimeProducts
