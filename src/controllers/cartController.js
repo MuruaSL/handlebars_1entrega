@@ -1,4 +1,4 @@
-import cartManager from "../classes/cartManager.js";
+import cartManager from "../dao/managers/fs.cartManager.js";
 
 // Crea un nuevo carrito
 export const createCart = (req, res) => {

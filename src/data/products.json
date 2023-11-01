@@ -167,5 +167,16 @@
       "mcafee_protect_1.jpg",
       "mcafee_protect_2.jpg"
     ]
+  },
+  {
+    "id": 14,
+    "title": "asdsdasadsa",
+    "description": "asdasdasdas",
+    "price": 3412,
+    "category": "asdasd",
+    "code": "ASUSZENZEN",
+    "stock": 123,
+    "status": true,
+    "thumbnails": "sadsadasdsa"
   }
 ]

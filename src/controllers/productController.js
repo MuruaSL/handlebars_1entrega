@@ -1,4 +1,4 @@
-import productManager from "../classes/productManager.js";
+import productManager from "../dao/managers/fs.productManager.js";
 
 export const getAllProducts = (req, res) => {
   try {

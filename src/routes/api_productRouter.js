@@ -3,11 +3,13 @@ import { getAllProducts, createProduct, getProductById,updateProduct,deleteProdu
 
 const productRouter = express.Router();
 
-// Rutas para productos
+// Rutas para productos (http)
 productRouter.get('/', getAllProducts);
 productRouter.post('/', createProduct);
 productRouter.get('/:pid', getProductById);
 productRouter.put('/:pid', updateProduct);
 productRouter.delete('/:pid', deleteProduct);
+
+
 
 export default productRouter;

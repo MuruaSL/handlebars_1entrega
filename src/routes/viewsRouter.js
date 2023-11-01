@@ -1,5 +1,6 @@
 import express from "express";
-import productManager from "../classes/productManager.js";
+import productManager from "../dao/managers/fs.productManager.js";
+import mongooseproductManager from "../dao/managers/mongoose.productManager.js";
 
 const viewsRoutes = express.Router();
 
@@ -22,5 +23,8 @@ viewsRoutes.get("/realTimeProducts", async (req, res) => {
     res.status(500).send("Error interno del servidor: " + error.message);
   }
 });
+
+
+
 
 export default viewsRoutes;
