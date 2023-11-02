@@ -36,15 +36,17 @@ io.on("connection", (socket) => {
   console.log(`Cliente conectado: ${socket.id}`);
 
   socket.on('addProduct', (producto) => {
+    console.log('Se agrego el producto correctamente')
     console.log(producto)
     productManagerMongoose.addProduct(producto)
     // productManager.addProduct(producto);
   });
 
-  socket.on('deleteProduct', (product_code) => {
-    //mongoose
+  socket.on('deleteProduct', async(product_code) => {
+    //mongoose 
     const mongoose_product = productManagerMongoose.getProductByCode(product_code)
     productManagerMongoose.deleteProductById(mongoose_product.__id)
+    console.log('Se Elimino el producto correctamente')
     // fs
     // const fs_id = productManager.getProductByCode(product_code)
     // productManager.deleteProduct(fs_id);
