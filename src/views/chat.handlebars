@@ -1,0 +1,18 @@
+<h1>Chat de la página</h1>
+
+<form id="AddMessageToChat">
+  <input type="text" name="user" id="user" placeholder="Su email" />
+  <input type="text" name="message" id="message" placeholder="Your message" />
+  <button type="submit">Enviar mensaje</button>
+</form>
+
+<br />
+<h2>Chat en vivo</h2>
+<div id="LiveChat">
+  {{#each AllMessages}}
+    <p>{{user}} Dice: {{message}}</p>
+  {{/each}}
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/chat.js"></script>

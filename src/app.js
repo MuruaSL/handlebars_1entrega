@@ -10,6 +10,7 @@ import productRouter from "./routes/api_productRouter.js";
 import cartRouter from "./routes/api_cartRouter.js";
 import viewsRouter from "./routes/viewsRouter.js";
 import productManagerMongoose from "./dao/managers/mongoose.productManager.js";
+import mongooseChatManager from "./dao/managers/mongoose.chatManager.js";
 
 
 
@@ -51,6 +52,13 @@ io.on("connection", (socket) => {
     // const fs_id = productManager.getProductByCode(product_code)
     // productManager.deleteProduct(fs_id);
 
+  });
+
+  socket.on('addMessage', (message) => {
+    console.log('mensaje enviado')
+    console.log(message)
+    mongooseChatManager.addMessage(message)
+    
   });
 
   socket.on("disconnect", () => {
