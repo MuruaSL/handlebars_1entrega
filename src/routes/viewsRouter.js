@@ -3,6 +3,7 @@ import fsproductManager from "../dao/managers/fs.productManager.js";
 import MessageManagerMongoose from "../dao/managers/mongoose.chatManager.js";
 import productManagerMongoose from "../dao/managers/mongoose.productManager.js";
 import productsModel from "../dao/models/products-schema.js";
+import CartModel from "../dao/models/cart-schema.js";
 const viewsRoutes = express.Router();
 
 viewsRoutes.get("/", async (req, res) => {
@@ -90,6 +91,40 @@ viewsRoutes.get('/realtimeproducts', async (req, res) => {
   res.json(response);
 });
 
+
+viewsRoutes.get('/products', async (req, res) => {
+  try {
+    let products = await productManagerMongoose.getProducts();
+
+    // Renderiza una vista con la lista de productos y opciones para ver detalles o agregar al carrito
+    products = products.map(product => ({ ...product.toObject() }));
+    res.render('products', { products });
+  } catch (error) {
+    console.error('Error al obtener la lista de productos:', error);
+    res.status(500).send('Error interno del servidor: ' + error.message);
+  }
+});
+
+// Ruta para mostrar un carrito específico por su ID
+viewsRoutes.get('/carts/:cid', async (req, res) => {
+  try {
+    const { cid } = req.params;
+    let cart = await CartModel.findById(cid);
+
+    if (!cart) {
+      return res.status(404).send('Carrito no encontrado');
+    }
+
+    // Renderiza una vista con los productos que pertenecen al carrito
+    const products = cart.productos.map(product => ({ ...product.toObject() }));
+    console.log(products)
+    res.render('cart', { products });
+
+  } catch (error) {
+    console.error('Error al obtener el carrito:', error);
+    res.status(500).send('Error interno del servidor: ' + error.message);
+  }
+});
 
 
 export default viewsRoutes;
