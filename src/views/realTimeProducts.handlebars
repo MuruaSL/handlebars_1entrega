@@ -1,4 +1,4 @@
-<h1>Lista de Productos - Agregar Producto</h1>
+{{!-- <h1>Lista de Productos - Agregar Producto</h1>
   <form id="addProductForm">
     <input type="text" name="title" id="title" placeholder="Título del producto" />
     <input type="text" name="description" id="description" placeholder="Descripción" />
@@ -18,16 +18,61 @@
 <br>
   <ul id="productList">
     {{#each products}}
-      <li>
-        <h2>{{this.title}}</h2>
-        <p>{{this.description}}</p>
-        <p>Precio: {{this.price}}</p>
-        <p>Código: {{this.code}}</p>
-        <p>Stock: {{this.stock}}</p>
-        <p>Status: {{this.status}}</p>
-        <p>Categoria: {{this.category}}</p>
-      </li>
-    {{/each}}
-  </ul>
+    <li>
+      <h2>{{this.title}}</h2>
+      <p>{{this.description}}</p>
+      <p>Precio: {{this.price}}</p>
+      <p>Código: {{this.code}}</p>
+      <p>Stock: {{this.stock}}</p>
+      <p>Status: {{this.status}}</p>
+      <p>Categoria: {{this.category}}</p>
+    </li>
+  {{/each}}
+</ul>
+<div>
+  currentPage: {{currentPage}}
+  totalPages: {{totalPages}}
+  totalProducts: {{totalProducts}}
+  productsDocs: {{products.docs}}
+</div>
 <script src="/socket.io/socket.io.js"></script>
-<script src="/js/index.js"></script>
+<script src="/js/index.js"></script> --}}
+
+<div>
+    <table>
+        <thead>
+            <tr>
+                <th>title</th>
+                <th>description</th>
+                <th>price</th>
+                <th>code</th>
+                <th>stock</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each docs}}
+            <tr>
+                <td>{{this.title}}</td>
+                <td>{{this.description}}</td>
+                <td>{{this.price}}</td>
+                <td>{{this.code}}</td>
+                <td>{{this.stock}}</td>
+
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+
+    <div>
+        <br>
+        Total pages: {{totalPages}}
+        <br>
+        {{#if hasPrevPage}}
+            <a href="{{prevLink}}">Previus</a>
+        {{/if}}
+        <br>
+        {{#if hasNextPage}}
+            <a href="{{nextLink}}">Next</a>
+        {{/if}}
+    </div>
+</div>

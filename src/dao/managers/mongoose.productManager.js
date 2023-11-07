@@ -31,6 +31,7 @@ class ProductManagerMongoose {
       throw new Error("Error al obtener los productos de la base de datos: " + error.message);
     }
   }
+  
 
   async getProductByCode(searchedCode) {
     try {
