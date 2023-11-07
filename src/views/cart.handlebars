@@ -1,16 +1,38 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Carrito de Compras</title>
 </head>
 <body>
     <h1>Carrito de Compras</h1>
-    <ul>
-        {{#each products}}
-            <li>Producto: {{this.producto}} - Cantidad: {{this.cantidad}}</li>
-        {{/each}}
-    </ul>
-    <a href="/">Volver a la página de productos</a>
+    {{! <ul> }}
+    <div>
+        <table style="width: 100%;">
+            {{#each products}}
+                <tr>
+                    <th>Producto:</th>
+                    <th>Precio: $</th>
+                    <th>Categoría</th>
+                    <th>Descripción</th>
+                    <th>Cantidad</th>
+                </tr>
+                <tr>
+                    <td style="text-align: center">{{this.title}}</td>
+                    <td style="text-align: center">{{this.price}}</td>
+                    <td style="text-align: center">{{this.category}}</td>
+                    <td style="text-align: center">{{this.description}}</td>
+                    <td style="text-align: center">{{this.cantidad}}</td>
+                </tr>
+            {{/each}}
+        </table>
+    </div>
+
+    <br />
+    
+    <div>
+        <a href="/products">Volver a la página de productos</a>
+    </div>
+    
+
 </body>
 </html>

@@ -117,8 +117,18 @@ viewsRoutes.get('/carts/:cid', async (req, res) => {
 
     // Renderiza una vista con los productos que pertenecen al carrito
     const products = cart.productos.map(product => ({ ...product.toObject() }));
-    console.log(products)
-    res.render('cart', { products });
+     // Crear un arreglo para almacenar los detalles completos de los productos
+    const productDetails = [];
+
+    // Recorrer los productos en el carrito y buscar sus detalles en la base de datos
+    for (const product of products) {
+      const productDetail = await productsModel.findById(product.producto);
+      if (productDetail) {
+        // Agregar los detalles del producto al arreglo
+        productDetails.push({ ...productDetail.toObject(), cantidad: product.cantidad });
+      }
+    }
+    res.render('cart', { products:productDetails });
 
   } catch (error) {
     console.error('Error al obtener el carrito:', error);
