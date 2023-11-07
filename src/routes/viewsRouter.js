@@ -3,7 +3,6 @@ import fsproductManager from "../dao/managers/fs.productManager.js";
 import MessageManagerMongoose from "../dao/managers/mongoose.chatManager.js";
 import productManagerMongoose from "../dao/managers/mongoose.productManager.js";
 import productsModel from "../dao/models/products-schema.js";
-
 const viewsRoutes = express.Router();
 
 viewsRoutes.get("/", async (req, res) => {
@@ -90,9 +89,6 @@ viewsRoutes.get('/realtimeproducts', async (req, res) => {
 
   res.json(response);
 });
-
-
-
 
 
 

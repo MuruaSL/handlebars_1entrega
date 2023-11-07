@@ -1,24 +1,5 @@
 import mongoose from "mongoose";
 
-const mongoose = require("mongoose");
-
-const productoSchema = new mongoose.Schema({
-  id: Number,
-  title: String,
-  description: String,
-  price: Number,
-  code: {
-    type: String,
-    unique: true
-  },
-  stock: Number,
-  status: Boolean,
-  thumbnails: {
-    type: [String],
-    default: []
-  }
-});
-
 const carritoSchema = new mongoose.Schema({
   id: {
     type: String,
@@ -28,7 +9,8 @@ const carritoSchema = new mongoose.Schema({
   productos: [
     {
       producto: {
-        type: [productoSchema] // Utilizamos el esquema de producto definido anteriormente
+        type: mongoose.Schema.Types.ObjectId, //tipo ObjectId para hacer referencia al modelo Productos
+        ref: 'product' //Nombre de la coleccion de products en base de datos en minúsculas y singular
       },
       cantidad: {
         type: Number,
@@ -38,6 +20,7 @@ const carritoSchema = new mongoose.Schema({
   ]
 });
 
-const CartModel = mongoose.model("Carrito", carritoSchema);
+
+const CartModel = mongoose.model("Cart", carritoSchema);
 
 export default CartModel
