@@ -46,6 +46,19 @@ class ProductManagerMongoose {
     }
   }
 
+  async getProductById(productId) {
+    try {
+      const product = await productsModel.findById(productId).exec();
+      if (product) {
+        return product;
+      } else {
+        throw new Error("Producto no encontrado");
+      }
+    } catch (error) {
+      throw new Error("Error al obtener el producto por ID: " + error.message);
+    }
+  }
+
   async deleteProductById(product_id) {
     try {
       const product = await productsModel.findOne({ id: product_id }).exec();

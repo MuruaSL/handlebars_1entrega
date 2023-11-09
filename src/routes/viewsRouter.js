@@ -105,6 +105,26 @@ viewsRoutes.get('/products', async (req, res) => {
   }
 });
 
+// vista de productos particulares
+
+viewsRoutes.get('/products/:productId', async (req, res) => {
+  try {
+    const productId = req.params.productId;
+    const product = await productManagerMongoose.getProductById((productId.toString()));
+
+    if (!product) {
+      return res.status(404).send('Producto no encontrado');
+    }
+
+    const productData = { ...product.toObject() };
+    res.render('productDetail', { product: productData });
+  } catch (error) {
+    console.error('Error al obtener detalles del producto:', error);
+    res.status(500).send('Error interno del servidor: ' + error.message);
+  }
+});
+
+
 // Ruta para mostrar un carrito específico por su ID
 viewsRoutes.get('/carts/:cid', async (req, res) => {
   try {

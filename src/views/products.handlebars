@@ -1,27 +1,4 @@
-{{!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Lista de Productos</title>
-</head>
-<body>
-    <h1>Lista de Productos</h1>
-    <ul>
-        {{#each products}}
-            <li>
-                <h2>{{this.title}}</h2>
-                <p>Precio: ${{this.price}}</p>
-                <p>Categoría: {{this.category}}</p>
-                <p>Descripción: {{this.description}}</p>
-                <a href="/products/{{this._id}}">Detalles</a>
-                <button data-product-id="{{this._id}}" class="add-to-cart-button">Agregar al Carrito</button>
-            </li>
-        {{/each}}
-    </ul>
-</body>
-</html> --}}
-
-
+{{!-- 
 <h1>Lista de Productos - Agregar Producto</h1>
   <form id="addProductForm">
     <input type="text" name="title" id="title" placeholder="Título del producto" />
@@ -60,4 +37,26 @@
   productsDocs: {{products.docs}}
 </div>
 <script src="/socket.io/socket.io.js"></script>
-<script src="/js/index.js"></script> 
+<script src="/js/index.js"></script>  --}}
+
+
+<h1>Lista de Productos</h1>
+<ul id="productList">
+  {{#each products}}
+    <li>
+      <h2>{{this.title}}</h2>
+      <p>{{this.description}}</p>
+      <p>Precio: {{this.price}}</p>
+      <p>Código: {{this.code}}</p>
+      <p>Stock: {{this.stock}}</p>
+      <p>Status: {{this.status}}</p>
+      <p>Categoría: {{this.category}}</p>
+
+      <!-- Botón para ver detalles del producto -->
+      <a href="/products/{{this._id}}">Ver Detalles</a>
+
+      <!-- Botón para agregar al carrito directamente -->
+      <button onclick="addToCart('{{this._id}}')">Agregar al Carrito</button>
+    </li>
+  {{/each}}
+</ul>
