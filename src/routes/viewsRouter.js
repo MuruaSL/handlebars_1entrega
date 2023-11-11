@@ -6,22 +6,57 @@ import productsModel from "../dao/models/products-schema.js";
 import CartModel from "../dao/models/cart-schema.js";
 const viewsRoutes = express.Router();
 
+//opcion de / donde solo cargan los productos 
+// viewsRoutes.get("/", async (req, res) => {
+//   try {
+//     //logica para cargar las cosas con FS
+//     // const products = await fsproductManager.getProducts();
+//     // res.render("home", { products });
+
+//     //logica para cargar las cosas con Mongoose
+//     let products = await productManagerMongoose.getProducts()
+//     products = products.map(product => ({ ...product.toObject() }));
+//     res.render("home", { products });
+//   } catch (error) {
+//     console.error("Error en la ruta principal:", error);
+//     res.status(500).send("Error interno del servidor: " + error.message);
+//   }
+// });
+
 viewsRoutes.get("/", async (req, res) => {
   try {
-    //logica para cargar las cosas con FS
-    // const products = await fsproductManager.getProducts();
-    // res.render("home", { products });
+    const page = parseInt(req.query.page ?? 1);
+    const limit = parseInt(req.query.limit ?? 10);
+    const sort = req.query.sort ?? 'asc';
+    const queryField = req.query.query ?? 'title';
 
     //logica para cargar las cosas con Mongoose
-    let products = await productManagerMongoose.getProducts()
-    products = products.map(product => ({ ...product.toObject() }));
-    res.render("home", { products });
+    let products = await productManagerMongoose.filteredGetProducts({
+      page,
+      limit,
+      sort,
+      queryField
+    });
+
+    // Renderiza la vista "home" con los productos y parámetros de consulta
+    res.render("home", {
+      products,
+      page,
+      limit,
+      sort,
+      queryField
+    });
   } catch (error) {
     console.error("Error en la ruta principal:", error);
     res.status(500).send("Error interno del servidor: " + error.message);
   }
 });
 
+
+
+
+
+//Funcionalidad de traer productos con fileSystem
 // viewsRoutes.get("/realTimeProducts", async (req, res) => {
 //   try {
 //     //logica para cargar las cosas con FS
@@ -46,6 +81,8 @@ viewsRoutes.get("/chat", async (req, res) => {
     res.status(500).send("Error interno del servidor: " + error.message);
   }
 });
+
+
 viewsRoutes.get('/realtimeproducts', async (req, res) => {
   const page = parseInt(req.query.page ?? 1);
   const limit = parseInt(req.query.limit ?? 10);

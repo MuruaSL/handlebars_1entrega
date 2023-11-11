@@ -1,4 +1,5 @@
 import express from 'express';
+import mongoose from 'mongoose';
 import {
   createCart,
   getCartById,
@@ -8,6 +9,7 @@ import {
   updateCartItem,
   deleteCartItem,
 } from '../dao/managers/mongoose.cartManager.js';
+import CartModel from '../dao/models/cart-schema.js';
 
 const cartRouter = express.Router();
 
@@ -22,19 +24,69 @@ cartRouter.post('/', async (req, res) => {
   }
 });
 
-cartRouter.get('/:cartId', async (req, res) => {
+cartRouter.get('/:cid', async (req, res) => {
   try {
-    const { cartId } = req.params;
-    const cart = await getCartById(cartId);
-    if (!cart) {
-      res.status(404).json({ status: 'error', message: 'Carrito no encontrado' });
-    } else {
-      res.json({ status: 'success', cart });
+    const { cid } = req.params;
+
+    // Obtén el carrito sin instancias de modelo (usando lean)
+    const cart = await CartModel.aggregate([
+      { $match: { _id: new mongoose.Types.ObjectId(cid) } },
+      {
+        $lookup: {
+          from: 'products', // Nombre de la colección de productos en la base de datos
+          localField: 'productos.producto',
+          foreignField: '_id',
+          as: 'productos.producto',
+        },
+      },
+      { $unwind: { path: '$productos.producto', preserveNullAndEmptyArrays: true } },
+    ]);
+
+    console.log("Cart result:", cart);
+
+    // Verifica si 'productos' es un objeto con la propiedad 'producto' y si 'producto' es un array
+    if (!cart || cart.length === 0 || !cart[0].productos) {
+      return res.status(404).json({ status: 'error', message: 'Carrito no encontrado o formato incorrecto' });
     }
+
+    // Obtén la lista de productos
+    const productList = Array.isArray(cart[0].productos.producto)
+      ? cart[0].productos.producto.filter((product) => product !== null) // Filtra productos nulos
+      : [cart[0].productos.producto].filter((product) => product !== null);
+
+    // Formatea la respuesta según tu estructura deseada
+    const formattedCart = {
+      status: 'success',
+      cart: {
+        _id: cart[0]._id,
+        id: cart[0].id,
+        productos: productList.map((item) => ({
+          producto: {
+            id: item._id,
+            title: item.title,
+            description: item.description,
+            price: item.price,
+            code: item.code,
+            stock: item.stock,
+            status: item.status,
+            thumbnails: item.thumbnails,
+          },
+          cantidad: item.cantidad,
+          _id: item._id,
+        })),
+        __v: cart[0].__v,
+        // Otros campos según sea necesario
+      },
+    };
+
+    res.json(formattedCart);
   } catch (error) {
+    console.error("Error:", error);
     res.status(500).json({ status: 'error', message: error.message });
   }
 });
+
+
 
 cartRouter.put('/:cid', async (req, res) => {
   try {

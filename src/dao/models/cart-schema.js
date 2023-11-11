@@ -6,11 +6,11 @@ const carritoSchema = new mongoose.Schema({
     unique: true,
     required: true
   },
-  productos: [
+  products: [
     {
-      producto: {
-        type: mongoose.Schema.Types.ObjectId, //tipo ObjectId para hacer referencia al modelo Productos
-        ref: 'product' //Nombre de la coleccion de products en base de datos en minúsculas y singular
+      product: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'products' // Cambiado de 'Product' a 'products'
       },
       cantidad: {
         type: Number,
@@ -20,7 +20,7 @@ const carritoSchema = new mongoose.Schema({
   ]
 });
 
-
+// Registra el modelo de carritos
 const CartModel = mongoose.model("Cart", carritoSchema);
 
-export default CartModel
+export default CartModel;
