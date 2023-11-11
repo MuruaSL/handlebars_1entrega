@@ -32,21 +32,13 @@ class ProductManagerMongoose {
     }
   }
   
-  async filteredGetProducts({ page , limit, sort, queryField }) {
+  async filteredGetProducts({ page, limit, sort, queryField }) {
     try {
-      // de aqui se gestiona si es asc o desc  le asigna los valores 1 o -1
       const sortOptions = {};
-        if (sort === 'asc') {
-          sortOptions[queryField] = 1;
-        } else if (sort === 'desc') {
-          sortOptions[queryField] = -1;
-        }
-      
-      //aqui se gestiona segun que parametro del producto se va a ordenar
+      sortOptions[queryField] = sort === 'asc' ? 1 : -1;
+  
       const filter = {};
-      if (queryField === 'title' || queryField === 'description' || queryField === 'price' || queryField === 'code' || queryField === 'stock' || queryField === 'status') {
-        
-      }
+      // se pueden agregar mas logicas de filtro  si es necesario
   
       const result = await productsModel.paginate(filter, {
         page,
@@ -55,12 +47,11 @@ class ProductManagerMongoose {
         sort: sortOptions,
       });
   
-      return result.docs;
+      return result;
     } catch (error) {
       throw new Error("Error al obtener los productos filtrados de la base de datos: " + error.message);
     }
   }
-  
   
   
   async getProductByCode(searchedCode) {

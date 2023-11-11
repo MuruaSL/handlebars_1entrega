@@ -1,30 +1,37 @@
-{{!-- <h1>Lista de Productos</h1>
-<ul>
-  {{#each products}}
-    <li>
-      <h2>{{this.title}}</h2>
-      <p>{{this.description}}</p>
-      <p>Categoria: {{this.category}}</p>
-      <p>Precio: {{this.price}}</p>
-      <p>Código: {{this.code}}</p>
-      <p>Stock: {{this.stock}}</p>
-      <p>Status: {{this.status}}</p>
-    </li>
-  {{/each}}
-</ul> --}}
+<div>
+  <table>
+    <thead>
+      <tr>
+        <th>title</th>
+        <th>description</th>
+        <th>price</th>
+        <th>code</th>
+        <th>stock</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each products}}
+        <tr>
+          <td>{{this.title}}</td>
+          <td>{{this.description}}</td>
+          <td>{{this.price}}</td>
+          <td>{{this.code}}</td>
+          <td>{{this.stock}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
 
-<h1>Lista de Productos</h1>
-<p>Mostrando página {{page}}, límite {{limit}}, orden {{sort}}, campo de consulta {{queryField}}</p>
-<ul>
-  {{#each products}}
-    <li>
-      <h2>{{this.title}}</h2>
-      <p>{{this.description}}</p>
-      <p>Categoria: {{this.category}}</p>
-      <p>Precio: {{this.price}}</p>
-      <p>Código: {{this.code}}</p>
-      <p>Stock: {{this.stock}}</p>
-      <p>Status: {{this.status}}</p>
-    </li>
-  {{/each}}
-</ul>
+  <div>
+    <br>
+    Total pages: {{totalPages}}
+    <br>
+    {{#if hasPrevPage}}
+      <a href="{{prevLink}}">Previus</a>
+    {{/if}}
+    <br>
+    {{#if hasNextPage}}
+      <a href="{{nextLink}}">Next</a>
+    {{/if}}
+  </div>
+</div>

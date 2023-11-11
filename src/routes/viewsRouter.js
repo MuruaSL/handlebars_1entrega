@@ -22,7 +22,6 @@ const viewsRoutes = express.Router();
 //     res.status(500).send("Error interno del servidor: " + error.message);
 //   }
 // });
-
 viewsRoutes.get("/", async (req, res) => {
   try {
     const page = parseInt(req.query.page ?? 1);
@@ -40,17 +39,24 @@ viewsRoutes.get("/", async (req, res) => {
 
     // Renderiza la vista "home" con los productos y parámetros de consulta
     res.render("home", {
-      products,
+      products: products.docs,  // Usa products.docs en lugar de products
       page,
       limit,
       sort,
-      queryField
+      queryField,
+      totalPages: products.totalPages,
+      hasPrevPage: products.hasPrevPage,
+      hasNextPage: products.hasNextPage,
+      prevLink: products.prevPage ? `/?page=${products.prevPage}&limit=${limit}&sort=${sort}&query=${queryField}` : null,
+      nextLink: products.nextPage ? `/?page=${products.nextPage}&limit=${limit}&sort=${sort}&query=${queryField}` : null,
     });
   } catch (error) {
     console.error("Error en la ruta principal:", error);
     res.status(500).send("Error interno del servidor: " + error.message);
   }
 });
+
+
 
 
 

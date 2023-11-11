@@ -138,6 +138,11 @@ cartRouter.delete('/:cid/products/:pid', async (req, res) => {
   }
 });
 
+/////////////////////////////////////////////////////
+//          AGREGAR PRODUCTOS AL CARRITO 
+/////////////////////////////////////////////////////
+
+//// esta funcion agrega los productos a un carrito pasado por parametro  :cid 
 cartRouter.post('/:cid/product/:pid', async (req, res) => {
   try {
     const { cid, pid } = req.params;
@@ -148,5 +153,48 @@ cartRouter.post('/:cid/product/:pid', async (req, res) => {
     res.status(500).json({ status: 'error', message: error.message });
   }
 });
+
+ //// pero esta version agrega el producto a cualquier carrito que encuentre 
+cartRouter.post('/product/:pid', async (req, res) => {
+  try {
+    const { pid } = req.params;
+    const productData = req.body; // Datos del producto a agregar
+
+    // Obtener el primer carrito existente
+    const cart = await CartModel.findOne();
+
+    if (cart) {
+      // El carrito existe, agrega el producto
+      const productToAdd = await ProductModel.findById(pid);
+      
+      if (productToAdd) {
+        // Agrega el producto al carrito
+        cart.products.push({ product: productToAdd._id, cantidad: 1 });
+        await cart.save();
+
+        return res.json({ status: 'success', message: 'Producto agregado al carrito correctamente', cart });
+      }
+    } else {
+      // El carrito no existe, crea un nuevo carrito y agrega el producto
+      const newCart = new CartModel();
+      const productToAdd = await ProductModel.findById(pid);
+
+      if (productToAdd) {
+        // Agrega el producto al nuevo carrito
+        newCart.products.push({ product: productToAdd._id, cantidad: 1 });
+        await newCart.save();
+
+        return res.json({ status: 'success', message: 'Producto agregado al nuevo carrito correctamente', cart: newCart });
+      }
+    }
+
+    // Si llegamos aquí, algo salió mal
+    res.status(404).json({ status: 'error', message: 'No se pudo agregar el producto al carrito' });
+  } catch (error) {
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+});
+
+
 
 export default cartRouter;
