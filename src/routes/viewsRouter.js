@@ -6,22 +6,10 @@ import productsModel from "../dao/models/products-schema.js";
 import CartModel from "../dao/models/cart-schema.js";
 const viewsRoutes = express.Router();
 
-//opcion de / donde solo cargan los productos 
-// viewsRoutes.get("/", async (req, res) => {
-//   try {
-//     //logica para cargar las cosas con FS
-//     // const products = await fsproductManager.getProducts();
-//     // res.render("home", { products });
 
-//     //logica para cargar las cosas con Mongoose
-//     let products = await productManagerMongoose.getProducts()
-//     products = products.map(product => ({ ...product.toObject() }));
-//     res.render("home", { products });
-//   } catch (error) {
-//     console.error("Error en la ruta principal:", error);
-//     res.status(500).send("Error interno del servidor: " + error.message);
-//   }
-// });
+//////////////////////////////////////////////////////////////////
+//                      render en /
+/////////////////////////////////////////////////////////////////
 viewsRoutes.get("/", async (req, res) => {
   try {
     const page = parseInt(req.query.page ?? 1);
@@ -56,8 +44,36 @@ viewsRoutes.get("/", async (req, res) => {
   }
 });
 
+//opcion de / donde solo cargan los productos 
+// viewsRoutes.get("/", async (req, res) => {
+//   try {
+//     //logica para cargar las cosas con FS
+//     // const products = await fsproductManager.getProducts();
+//     // res.render("home", { products });
 
+//     //logica para cargar las cosas con Mongoose
+//     let products = await productManagerMongoose.getProducts()
+//     products = products.map(product => ({ ...product.toObject() }));
+//     res.render("home", { products });
+//   } catch (error) {
+//     console.error("Error en la ruta principal:", error);
+//     res.status(500).send("Error interno del servidor: " + error.message);
+//   }
+// });
 
+//////////////////////////////////////////////////////////////////
+//                      render de chat 
+/////////////////////////////////////////////////////////////////
+
+viewsRoutes.get("/chat", async (req, res) => {
+  try {
+    const AllMessages = await MessageManagerMongoose.getMessages();
+    res.render("chat",{AllMessages});
+  } catch (error) {
+    console.error("Error en la pagina Chat:", error);
+    res.status(500).send("Error interno del servidor: " + error.message);
+  }
+});
 
 
 
@@ -78,62 +94,44 @@ viewsRoutes.get("/", async (req, res) => {
 //   }
 // });
 
-viewsRoutes.get("/chat", async (req, res) => {
-  try {
-    const AllMessages = await MessageManagerMongoose.getMessages();
-    res.render("chat",{AllMessages});
-  } catch (error) {
-    console.error("Error en la pagina Chat:", error);
-    res.status(500).send("Error interno del servidor: " + error.message);
-  }
-});
 
-
+//////////////////////////////////////////////////////////////////
+//                      render en /realtimeproducts 
+/////////////////////////////////////////////////////////////////
 viewsRoutes.get('/realtimeproducts', async (req, res) => {
-  const page = parseInt(req.query.page ?? 1);
-  const limit = parseInt(req.query.limit ?? 10);
-  const sort = req.query.sort ?? 'asc';
-  const queryField = req.query.query ?? 'title';
+  try {
+    const page = parseInt(req.query.page ?? 1);
+    const limit = parseInt(req.query.limit ?? 10);
+    const sort = req.query.sort ?? 'asc';
+    const queryField = req.query.query ?? 'title';
 
-  const sortOptions = {};
-  if (queryField === 'title' || queryField === 'description' || queryField === 'price' || queryField === 'code' || queryField === 'stock' || queryField === 'status') {
-    if (sort === 'asc') {
-      sortOptions[queryField] = 1;
-    } else if (sort === 'desc') {
-      sortOptions[queryField] = -1;
-    }
+    // Utiliza la función filteredGetProducts para obtener los productos
+    const result = await productManagerMongoose.filteredGetProducts({ page, limit, sort, queryField });
+
+    // Crea el objeto de respuesta siguiendo el formato que mencionaste
+    const response = {
+      status: 'success', // O 'error' en caso de error
+      payload: result,
+      totalPages: result.totalPages,
+      prevPage: result.prevPage,
+      nextPage: result.nextPage,
+      page: result.page,
+      hasPrevPage: result.hasPrevPage,
+      hasNextPage: result.hasNextPage,
+      prevLink: result.hasPrevPage ? `/realtimeproducts?page=${result.prevPage}&limit=${limit}&sort=${sort}&query=${queryField}` : null,
+      nextLink: result.hasNextPage ? `/realtimeproducts?page=${result.nextPage}&limit=${limit}&sort=${sort}&query=${queryField}` : null,
+    };
+
+    res.json(response);
+  } catch (error) {
+    console.error("Error en la ruta /realtimeproducts:", error);
+    res.status(500).json({ status: 'error', message: error.message });
   }
-
-  const filter = {};
-  if (queryField === 'title' || queryField === 'description' || queryField === 'price' || queryField === 'code' || queryField === 'stock' || queryField === 'status') {
-    // Aquí puedes aplicar un filtro si es necesario
-    // Ejemplo: filter[queryField] = { $regex: 'valor_a_buscar', $options: 'i' };
-  }
-
-  const result = await productsModel.paginate(filter, {
-    page,
-    limit,
-    lean: true,
-    sort: sortOptions,
-  });
-
-  // Crea el objeto de respuesta siguiendo el formato que mencionaste
-  const response = {
-    status: 'success', // O 'error' en caso de error
-    payload: result.docs,
-    totalPages: result.totalPages,
-    prevPage: result.prevPage,
-    nextPage: result.nextPage,
-    page: result.page,
-    hasPrevPage: result.hasPrevPage,
-    hasNextPage: result.hasNextPage,
-    prevLink: result.hasPrevPage ? `/realtimeproducts?page=${result.prevPage}&limit=${limit}&sort=${sort}&query=${queryField}` : null,
-    nextLink: result.hasNextPage ? `/realtimeproducts?page=${result.nextPage}&limit=${limit}&sort=${sort}&query=${queryField}` : null,
-  };
-
-  res.json(response);
 });
 
+//////////////////////////////////////////////////////////////////
+//                      render en /products 
+/////////////////////////////////////////////////////////////////
 
 viewsRoutes.get('/products', async (req, res) => {
   try {
@@ -168,6 +166,9 @@ viewsRoutes.get('/products/:productId', async (req, res) => {
 });
 
 
+//////////////////////////////////////////////////////////////////
+//                      render en /carts 
+/////////////////////////////////////////////////////////////////
 // Ruta para mostrar un carrito específico por su ID
 viewsRoutes.get('/carts/:cid', async (req, res) => {
   try {
