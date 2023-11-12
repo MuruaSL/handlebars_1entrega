@@ -10,39 +10,83 @@ const viewsRoutes = express.Router();
 //////////////////////////////////////////////////////////////////
 //                      render en /
 /////////////////////////////////////////////////////////////////
+
+////////////////////////////
+//    router de sessions  //
+////////////////////////////
+
 viewsRoutes.get("/", async (req, res) => {
-  try {
-    const page = parseInt(req.query.page ?? 1);
-    const limit = parseInt(req.query.limit ?? 10);
-    const sort = req.query.sort ?? 'asc';
-    const queryField = req.query.query ?? 'title';
-
-    //logica para cargar las cosas con Mongoose
-    let products = await productManagerMongoose.filteredGetProducts({
-      page,
-      limit,
-      sort,
-      queryField
-    });
-
-    // Renderiza la vista "home" con los productos y parámetros de consulta
-    res.render("home", {
-      products: products.docs,  // Usa products.docs en lugar de products
-      page,
-      limit,
-      sort,
-      queryField,
-      totalPages: products.totalPages,
-      hasPrevPage: products.hasPrevPage,
-      hasNextPage: products.hasNextPage,
-      prevLink: products.prevPage ? `/?page=${products.prevPage}&limit=${limit}&sort=${sort}&query=${queryField}` : null,
-      nextLink: products.nextPage ? `/?page=${products.nextPage}&limit=${limit}&sort=${sort}&query=${queryField}` : null,
-    });
-  } catch (error) {
-    console.error("Error en la ruta principal:", error);
-    res.status(500).send("Error interno del servidor: " + error.message);
+  if (!req.session?.user) {
+    return res.redirect('/login')
   }
-});
+  return res.render('home',{})
+
+})
+
+viewsRoutes.get('/login', (req, res) => {
+  if(req.session?.user) {
+      return res.redirect('/profile')
+  }
+  res.render('login', {})
+})
+
+viewsRoutes.get('/signup', (req, res) => {
+  if(req.session?.user) {
+      return res.redirect('/profile')
+  }
+
+  res.render('signup', {})
+})
+
+viewsRoutes.get('/profile', auth, (req, res) => {
+  const user = req.session.user
+
+  res.render('profile', user)
+})
+
+// middleware para autenticar si hay 
+// una session y poder ir a /profile
+// si no hay una session activa redirect al / que nos llevara al login
+function auth(req, res, next) {
+  if(req.session?.user) return next()
+  res.redirect('/')
+}
+
+////////opcion donde renderiza paginado los productos
+//   try {
+//     const page = parseInt(req.query.page ?? 1);
+//     const limit = parseInt(req.query.limit ?? 10);
+//     const sort = req.query.sort ?? 'asc';
+//     const queryField = req.query.query ?? 'title';
+
+//     //logica para cargar las cosas con Mongoose
+//     let products = await productManagerMongoose.filteredGetProducts({
+//       page,
+//       limit,
+//       sort,
+//       queryField
+//     });
+
+//     // Renderiza la vista "home" con los productos y parámetros de consulta
+//     res.render("home", {
+//       products: products.docs,  // Usa products.docs en lugar de products
+//       page,
+//       limit,
+//       sort,
+//       queryField,
+//       totalPages: products.totalPages,
+//       hasPrevPage: products.hasPrevPage,
+//       hasNextPage: products.hasNextPage,
+//       prevLink: products.prevPage ? `/?page=${products.prevPage}&limit=${limit}&sort=${sort}&query=${queryField}` : null,
+//       nextLink: products.nextPage ? `/?page=${products.nextPage}&limit=${limit}&sort=${sort}&query=${queryField}` : null,
+//     });
+//   } catch (error) {
+//     console.error("Error en la ruta principal:", error);
+//     res.status(500).send("Error interno del servidor: " + error.message);
+//   }
+// });
+
+
 
 //opcion de / donde solo cargan los productos 
 // viewsRoutes.get("/", async (req, res) => {
@@ -136,10 +180,10 @@ viewsRoutes.get('/realtimeproducts', async (req, res) => {
 viewsRoutes.get('/products', async (req, res) => {
   try {
     let products = await productManagerMongoose.getProducts();
-
+    let user = req.session.user 
     // Renderiza una vista con la lista de productos y opciones para ver detalles o agregar al carrito
     products = products.map(product => ({ ...product.toObject() }));
-    res.render('products', { products });
+    res.render('products', { products, user });
   } catch (error) {
     console.error('Error al obtener la lista de productos:', error);
     res.status(500).send('Error interno del servidor: ' + error.message);
@@ -199,6 +243,8 @@ viewsRoutes.get('/carts/:cid', async (req, res) => {
     res.status(500).send('Error interno del servidor: ' + error.message);
   }
 });
+
+
 
 
 export default viewsRoutes;

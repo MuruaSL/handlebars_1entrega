@@ -7,18 +7,27 @@ import productManager from "./dao/managers/fs.productManager.js";
 import mongoose from "mongoose";
 import CartModel from "./dao/models/cart-schema.js";
 import ProductModel from "./dao/models/products-schema.js";
+import MongoStore from 'connect-mongo'
+import session from "express-session";
+
 // Routes
 import productRouter from "./routes/api_productRouter.js";
 import cartRouter from "./routes/api_cartRouter.js";
 import viewsRouter from "./routes/viewsRouter.js";
+import sessionRouter from "./routes/session.router.js";
+//Managers
 import productManagerMongoose from "./dao/managers/mongoose.productManager.js";
 import mongooseChatManager from "./dao/managers/mongoose.chatManager.js";
 import CartManagerMongoose from "./dao/managers/mongoose.cartManager.js";
 
 
-//inicializacion de servidor 
+//inicializacion de servidor // variables mongo
+const mongoUrl = 'mongodb+srv://leonardomurua:Dd40521547-4618@clusterleonardo.hg2jvxi.mongodb.net/?retryWrites=true&w=majority'
+const mongoDBName = 'ecommerse'
 const app = express();
 const port = 8080;
+
+//config de json para los post 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -28,9 +37,26 @@ app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 
+// Configuracion Sessions
+app.use(session({
+  store: MongoStore.create({
+      mongoUrl,
+      dbName: mongoDBName,
+      ttl: 100
+  }),
+  secret: 'secret',
+  resave: true,
+  saveUninitialized: true
+}))
+
+//////////////////////
+//   Enrutamientos  // 
+//////////////////////
 app.use("/", viewsRouter);
+app.get('/health', (req, res) => res.send('OK'))
 app.use("/api/cart", cartRouter);
 app.use("/api/products", productRouter);
+app.use('/api/session', sessionRouter)
 
 const server = http.createServer(app);
 const io = new SocketIOServer(server);
@@ -111,12 +137,10 @@ io.on("connection", (socket) => {
 
 });
 
-
-//conectamos mongo
-const mongoURL = 'mongodb+srv://leonardomurua:Dd40521547-4618@clusterleonardo.hg2jvxi.mongodb.net/?retryWrites=true&w=majority'
-const mongoDBName = 'ecommerse'
-
-mongoose.connect(mongoURL,{dbName:mongoDBName})
+/////////////////////////////
+//   conectamos mongoose  ///
+/////////////////////////////
+mongoose.connect(mongoUrl,{dbName:mongoDBName})
     .then(() => {
         console.log('db conectada')
         server.listen(port,()=>{
@@ -125,5 +149,5 @@ mongoose.connect(mongoURL,{dbName:mongoDBName})
     })
 
     .catch(error =>{
-        console.error("error connect DB")
+        console.error("error connecting to the DB")
     })
