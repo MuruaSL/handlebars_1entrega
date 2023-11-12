@@ -11,7 +11,6 @@ productForm.addEventListener("submit", async (event) => {
 
         // Obener el valor del _id del formulario
         const productId = productForm.dataset.id;
-        console.log('Product ID:', productId);
     
         // Emitir el evento addToCart al servidor
         socket.emit('addToCart', { productId });

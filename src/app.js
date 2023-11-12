@@ -45,18 +45,15 @@ io.on("connection", (socket) => {
     // productManager.addProduct(producto);
   });
 
-  
+  //accion addtocart de products y productsDetails.hanlebars mediante products.js
   socket.on('addToCart', async ({ productId }) => {
     try {
         // Obtener el carrito existente o crear uno nuevo
         const cart = await CartManagerMongoose.getOneCart({});
-        console.log('Carrito obtenido:', cart);
-
         let updatedCart;  // Definir la variable fuera de las condicionales
 
         if (cart) {
             // Verificar si el producto ya está en el carrito
-            console.log('Productos en el carrito:', cart.productos);
             const existingProduct = cart.productos && Array.isArray(cart.productos) && cart.productos.find((product) => product && product.producto && product.producto.toString() === productId);
 
             if (existingProduct) {
@@ -88,12 +85,6 @@ io.on("connection", (socket) => {
         socket.emit('addToCartError', { error: 'Error al agregar producto al carrito' });
     }
 });
-
-
-
-
-
-
 
 
   socket.on('deleteProduct', async(product_code) => {
