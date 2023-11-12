@@ -6,18 +6,18 @@ const carritoSchema = new mongoose.Schema({
     unique: true,
     required: true
   },
-  products: [
+  productos: [
     {
-      product: {
+      producto: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'products' // Cambiado de 'Product' a 'products'
+        ref: 'products'
       },
       cantidad: {
         type: Number,
         required: true
       }
-    }
-  ]
+    },
+  ],
 });
 
 // Registra el modelo de carritos
