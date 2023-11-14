@@ -4,6 +4,7 @@ import MessageManagerMongoose from "../dao/managers/mongoose.chatManager.js";
 import productManagerMongoose from "../dao/managers/mongoose.productManager.js";
 import productsModel from "../dao/models/products-schema.js";
 import CartModel from "../dao/models/cart-schema.js";
+import passport from "passport";
 const viewsRoutes = express.Router();
 
 
@@ -52,7 +53,29 @@ function auth(req, res, next) {
   res.redirect('/')
 }
 
-////////opcion donde renderiza paginado los productos
+//////////////////////////////////
+//   rutas de login con github  //
+//////////////////////////////////
+
+viewsRoutes.get('/login-github',passport.authenticate('github',{scope:['user:email']}))
+
+viewsRoutes.get('/githubcallback',passport.authenticate('github',{failureRedirect:'/'}),
+async(req,res)=>{
+    //clg para ver los datos obtenidos de github
+    // console.log('Callback: ',req.user)
+    req.session.user = req.user
+    // clg para ver datos de la session iniciada
+    // console.log(req.session)
+    res.redirect('/')
+})
+
+
+viewsRoutes.get('/private', auth, (req, res)=>{
+  res.json(req.session.user)
+})
+export default viewsRoutes;
+
+////////opcion donde renderiza paginado los productos en '/'
 //   try {
 //     const page = parseInt(req.query.page ?? 1);
 //     const limit = parseInt(req.query.limit ?? 10);
@@ -244,7 +267,3 @@ viewsRoutes.get('/carts/:cid', async (req, res) => {
   }
 });
 
-
-
-
-export default viewsRoutes;

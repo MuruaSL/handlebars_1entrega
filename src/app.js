@@ -9,6 +9,8 @@ import CartModel from "./dao/models/cart-schema.js";
 import ProductModel from "./dao/models/products-schema.js";
 import MongoStore from 'connect-mongo'
 import session from "express-session";
+import passport from "passport";
+import initializePassport from "./config/passport.config.js";
 
 // Routes
 import productRouter from "./routes/api_productRouter.js";
@@ -27,6 +29,28 @@ const mongoDBName = 'ecommerse'
 const app = express();
 const port = 8080;
 
+// Configuracion Sessions
+app.use(session({
+  store: MongoStore.create({
+      mongoUrl,
+      dbName: mongoDBName,
+      mongoOptions:{
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      },
+      ttl: 100
+  }),
+  secret: 'secret',
+  resave: true,
+  saveUninitialized: true
+}))
+
+//inicializar passport para iniciar sesion con github
+//y aplicarle el midle a app
+initializePassport()
+app.use(passport.initialize())
+app.use(passport.session())
+
 //config de json para los post 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -37,17 +61,7 @@ app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 
-// Configuracion Sessions
-app.use(session({
-  store: MongoStore.create({
-      mongoUrl,
-      dbName: mongoDBName,
-      ttl: 100
-  }),
-  secret: 'secret',
-  resave: true,
-  saveUninitialized: true
-}))
+
 
 //////////////////////
 //   Enrutamientos  // 
