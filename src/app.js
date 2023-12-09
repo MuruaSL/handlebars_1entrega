@@ -11,6 +11,7 @@ import MongoStore from 'connect-mongo'
 import session from "express-session";
 import passport from "passport";
 import initializePassport from "./config/passport.config.js";
+import MongoSingleton from "./MongoSingleton.js";
 
 // Routes
 import productRouter from "./routes/api_productRouter.js";
@@ -28,16 +29,11 @@ const mongoUrl = 'mongodb+srv://leonardomurua:Dd40521547-4618@clusterleonardo.hg
 const mongoDBName = 'ecommerse'
 const app = express();
 const port = 8080;
-
 // Configuracion Sessions
 app.use(session({
   store: MongoStore.create({
       mongoUrl,
       dbName: mongoDBName,
-      mongoOptions:{
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      },
       ttl: 100
   }),
   secret: 'secret',
@@ -82,6 +78,7 @@ io.on("connection", (socket) => {
     console.log('Se agrego el producto correctamente')
     console.log(producto)
     productManagerMongoose.addProduct(producto)
+    //fs
     // productManager.addProduct(producto);
   });
 
@@ -154,14 +151,29 @@ io.on("connection", (socket) => {
 /////////////////////////////
 //   conectamos mongoose  ///
 /////////////////////////////
-mongoose.connect(mongoUrl,{dbName:mongoDBName})
-    .then(() => {
-        console.log('db conectada')
-        server.listen(port,()=>{
-            console.log('escuchando en 8080')
-        })
-    })
+// mongoose.connect(mongoUrl,{dbName:mongoDBName})
+//     .then(() => {
+//         console.log('db conectada')
+//         server.listen(port,()=>{
+//             console.log('escuchando en 8080')
+//         })
+//     })
 
-    .catch(error =>{
-        console.error("error connecting to the DB")
-    })
+//     .catch(error =>{
+//         console.error("error connecting to the DB")
+//     })
+
+// Escucha el evento 'open' de la conexión para iniciar el servidor
+const mongoInstance = await MongoSingleton.getInstance();
+
+mongoose.connection.once('open', () => {
+  console.log('Base de datos conectada');
+  app.listen(port, () => {
+      console.log(`Servidor corriendo en el puerto ${port}`);
+  });
+});
+
+// Maneja el evento 'error' de la conexión
+mongoose.connection.on('error', (error) => {
+  console.error('Error conectando a la base de datos:', error);
+});
