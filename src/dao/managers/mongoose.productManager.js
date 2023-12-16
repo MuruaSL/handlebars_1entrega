@@ -1,4 +1,4 @@
-import productsModel from "../models/products-schema.js";
+import productsModel from "../models/schemas/products-schema.js";
 
 class ProductManagerMongoose {
   // Agregar los métodos necesarios para interactuar con la base de datos MongoDB utilizando Mongoose
@@ -25,8 +25,8 @@ class ProductManagerMongoose {
 
   async getProducts() {
     try {
-      const products = await productsModel.find().exec();
-      return products;
+        const products = await productsModel.find().exec();
+        return products;
     } catch (error) {
       throw new Error("Error al obtener los productos de la base de datos: " + error.message);
     }

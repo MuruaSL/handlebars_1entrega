@@ -2,9 +2,10 @@ import express from "express";
 import fsproductManager from "../dao/managers/fs.productManager.js";
 import MessageManagerMongoose from "../dao/managers/mongoose.chatManager.js";
 import productManagerMongoose from "../dao/managers/mongoose.productManager.js";
-import productsModel from "../dao/models/products-schema.js";
-import CartModel from "../dao/models/cart-schema.js";
+import productsModel from "../dao/models/schemas/products-schema.js";
+import CartModel from "../dao/models/schemas/cart-schema.js";
 import passport from "passport";
+import { getAll } from "../dao/controllers/product.controllers.js";
 const viewsRoutes = express.Router();
 
 
@@ -110,24 +111,6 @@ export default viewsRoutes;
 // });
 
 
-
-//opcion de / donde solo cargan los productos 
-// viewsRoutes.get("/", async (req, res) => {
-//   try {
-//     //logica para cargar las cosas con FS
-//     // const products = await fsproductManager.getProducts();
-//     // res.render("home", { products });
-
-//     //logica para cargar las cosas con Mongoose
-//     let products = await productManagerMongoose.getProducts()
-//     products = products.map(product => ({ ...product.toObject() }));
-//     res.render("home", { products });
-//   } catch (error) {
-//     console.error("Error en la ruta principal:", error);
-//     res.status(500).send("Error interno del servidor: " + error.message);
-//   }
-// });
-
 //////////////////////////////////////////////////////////////////
 //                      render de chat 
 /////////////////////////////////////////////////////////////////
@@ -200,18 +183,18 @@ viewsRoutes.get('/realtimeproducts', async (req, res) => {
 //                      render en /products 
 /////////////////////////////////////////////////////////////////
 
-viewsRoutes.get('/products', async (req, res) => {
-  try {
-    let products = await productManagerMongoose.getProducts();
-    let user = req.session.user 
-    // Renderiza una vista con la lista de productos y opciones para ver detalles o agregar al carrito
-    products = products.map(product => ({ ...product.toObject() }));
-    res.render('products', { products, user });
-  } catch (error) {
-    console.error('Error al obtener la lista de productos:', error);
-    res.status(500).send('Error interno del servidor: ' + error.message);
-  }
-});
+// viewsRoutes.get('/products', async (req, res) => {
+//   try {
+//     let products = await productManagerMongoose.getProducts();
+//     let user = req.session.user 
+//     // Renderiza una vista con la lista de productos y opciones para ver detalles o agregar al carrito
+//     products = products.map(product => ({ ...product.toObject() }));
+//     res.render('products', { products, user });
+//   } catch (error) {
+//     console.error('Error al obtener la lista de productos:', error);
+//     res.status(500).send('Error interno del servidor: ' + error.message);
+//   }
+// });
 
 // vista de productos particulares
 
@@ -228,6 +211,20 @@ viewsRoutes.get('/products/:productId', async (req, res) => {
     res.render('productDetail', { product: productData });
   } catch (error) {
     console.error('Error al obtener detalles del producto:', error);
+    res.status(500).send('Error interno del servidor: ' + error.message);
+  }
+});
+
+// opcion de uso de controllers
+viewsRoutes.get('/products', async (req, res) => {
+  try {
+    let products = await getAll();
+    let user = req.session.user;
+    // Renderiza una vista con la lista de productos y opciones para ver detalles o agregar al carrito
+    products = products.map(product => ({ ...product.toObject() }));
+    res.render('products', { products, user });
+  } catch (error) {
+    console.error('Error al obtener la lista de productos:', error);
     res.status(500).send('Error interno del servidor: ' + error.message);
   }
 });

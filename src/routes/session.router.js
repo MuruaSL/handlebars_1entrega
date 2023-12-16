@@ -1,5 +1,5 @@
 import { Router } from "express";
-import UserModel from '../dao/models/user.model.js'
+import UserModel from '../dao/models/schemas/user-schema.js'
 import { createHash, isValidPassword } from "../utils.js";
 
 const sessionrouter = Router()

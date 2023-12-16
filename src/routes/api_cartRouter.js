@@ -9,7 +9,7 @@ import {
   updateCartItem,
   deleteCartItem,
 } from '../dao/managers/mongoose.cartManager.js';
-import CartModel from '../dao/models/cart-schema.js';
+import CartModel from '../dao/models/schemas/cart-schema.js';
 
 const cartRouter = express.Router();
 

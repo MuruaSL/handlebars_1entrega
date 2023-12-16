@@ -5,13 +5,14 @@ import http from "http";
 import { Server as SocketIOServer } from "socket.io";
 import productManager from "./dao/managers/fs.productManager.js";
 import mongoose from "mongoose";
-import CartModel from "./dao/models/cart-schema.js";
-import ProductModel from "./dao/models/products-schema.js";
+import CartModel from "./dao/models/schemas/cart-schema.js";
+import ProductModel from "./dao/models/schemas/products-schema.js";
 import MongoStore from 'connect-mongo'
 import session from "express-session";
 import passport from "passport";
 import initializePassport from "./config/passport.config.js";
-import MongoSingleton from "./MongoSingleton.js";
+import config from "./config/config.js";
+
 
 // Routes
 import productRouter from "./routes/api_productRouter.js";
@@ -29,11 +30,16 @@ const mongoUrl = 'mongodb+srv://leonardomurua:Dd40521547-4618@clusterleonardo.hg
 const mongoDBName = 'ecommerse'
 const app = express();
 const port = 8080;
+
 // Configuracion Sessions
 app.use(session({
   store: MongoStore.create({
       mongoUrl,
       dbName: mongoDBName,
+      mongoOptions:{
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      },
       ttl: 100
   }),
   secret: 'secret',
@@ -78,7 +84,6 @@ io.on("connection", (socket) => {
     console.log('Se agrego el producto correctamente')
     console.log(producto)
     productManagerMongoose.addProduct(producto)
-    //fs
     // productManager.addProduct(producto);
   });
 
@@ -151,29 +156,14 @@ io.on("connection", (socket) => {
 /////////////////////////////
 //   conectamos mongoose  ///
 /////////////////////////////
-// mongoose.connect(mongoUrl,{dbName:mongoDBName})
-//     .then(() => {
-//         console.log('db conectada')
-//         server.listen(port,()=>{
-//             console.log('escuchando en 8080')
-//         })
-//     })
+mongoose.connect(mongoUrl,{dbName:mongoDBName})
+    .then(() => {
+        console.log('db conectada')
+        server.listen(port,()=>{
+            console.log('escuchando en 8080')
+        })
+    })
 
-//     .catch(error =>{
-//         console.error("error connecting to the DB")
-//     })
-
-// Escucha el evento 'open' de la conexión para iniciar el servidor
-const mongoInstance = await MongoSingleton.getInstance();
-
-mongoose.connection.once('open', () => {
-  console.log('Base de datos conectada');
-  app.listen(port, () => {
-      console.log(`Servidor corriendo en el puerto ${port}`);
-  });
-});
-
-// Maneja el evento 'error' de la conexión
-mongoose.connection.on('error', (error) => {
-  console.error('Error conectando a la base de datos:', error);
-});
+    .catch(error =>{
+        console.error("error connecting to the DB")
+    })

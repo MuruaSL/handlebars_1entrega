@@ -1,29 +1,43 @@
 import mongoose from "mongoose"
-export default class MongoSingleton{
+import config from "./config/config.js"
 
-    static #instance
+export default class MongoSingleton {
+  static #instance
 
-    constructor(){
-        mongoose.connect("mongodb+srv://leonardomurua:Dd40521547-4618@clusterleonardo.hg2jvxi.mongodb.net/",{
-            dbName:"ecommerse"})
-        .then(()=>{
-            console.log("Db connected")
-        })
-        .catch(e => console.log(e))
+  constructor() {
+    mongoose.connect(config.mongoUrl, {
+      dbName: config.mongoDBName,
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    })
+      .then(() => {
+        console.log("Db connected")
+      })
+      .catch(e => console.log(e))
+  }
+
+  static getInstance() {
+    if (this.#instance) {
+      console.log("already connected")
+      return this.#instance
     }
 
-    static getInstance(){
+    this.#instance = new MongoSingleton()
+    return this.#instance
+  }
 
-        if (this.#instance) {
-            console.log("already connected")
-            return this.#instance
-        }
-            
-        this.#instance = new MongoSingleton()
-        return this.#instance
-    }
+  // Método para conectar explícitamente a la base de datos
+  static connect() {
+    return mongoose.connect(config.mongoUrl, {
+      dbName: config.mongoDBName,
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    })
+  }
 }
 
-MongoSingleton.getInstance()
+// No se ejecuta la conexión aquí, sino al llamar explícitamente al método `connect`
+// MongoSingleton.getInstance()
+
 
 
