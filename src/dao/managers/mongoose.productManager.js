@@ -1,4 +1,4 @@
-import productsModel from "../models/schemas/products-schema.js";
+import productsModel from "../models/products-schema.js";
 
 class ProductManagerMongoose {
   // Agregar los métodos necesarios para interactuar con la base de datos MongoDB utilizando Mongoose

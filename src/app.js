@@ -3,10 +3,7 @@ import handlebars from "express-handlebars";
 import __dirname from "./utils.js";
 import http from "http";
 import { Server as SocketIOServer } from "socket.io";
-import productManager from "./dao/managers/fs.productManager.js";
 import mongoose from "mongoose";
-import CartModel from "./dao/models/schemas/cart-schema.js";
-import ProductModel from "./dao/models/schemas/products-schema.js";
 import MongoStore from 'connect-mongo'
 import session from "express-session";
 import passport from "passport";

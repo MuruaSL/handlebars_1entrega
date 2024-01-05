@@ -1,4 +1,4 @@
-import CartModel from '../models/schemas/cart-schema.js';
+import CartModel from '../models/cart-schema.js';
 
 // Crear un nuevo carrito
 export const createCart = async (cartData) => {

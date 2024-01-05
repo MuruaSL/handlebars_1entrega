@@ -1,4 +1,4 @@
-import MessageModel from "../models/schemas/message-schema.js"
+import MessageModel from "../models/message-schema.js"
 
 class MessageManagerMongoose {
   // Agregar los métodos necesarios para interactuar con la base de datos MongoDB utilizando Mongoose

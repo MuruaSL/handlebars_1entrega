@@ -1,11 +1,12 @@
 import express from "express";
-import fsproductManager from "../dao/managers/fs.productManager.js";
 import MessageManagerMongoose from "../dao/managers/mongoose.chatManager.js";
 import productManagerMongoose from "../dao/managers/mongoose.productManager.js";
-import productsModel from "../dao/models/schemas/products-schema.js";
-import CartModel from "../dao/models/schemas/cart-schema.js";
+import productsModel from "../dao/models/products-schema.js";
+import CartModel from "../dao/models/cart-schema.js";
 import passport from "passport";
-import { getAll } from "../dao/controllers/product.controllers.js";
+import viewsController from "../dao/controllers/viewsController.js";
+import * as productController from '../dao/controllers/productController.js'
+import productService from "../dao/services/product.services.js";
 const viewsRoutes = express.Router();
 
 
@@ -76,39 +77,6 @@ viewsRoutes.get('/private', auth, (req, res)=>{
 })
 export default viewsRoutes;
 
-////////opcion donde renderiza paginado los productos en '/'
-//   try {
-//     const page = parseInt(req.query.page ?? 1);
-//     const limit = parseInt(req.query.limit ?? 10);
-//     const sort = req.query.sort ?? 'asc';
-//     const queryField = req.query.query ?? 'title';
-
-//     //logica para cargar las cosas con Mongoose
-//     let products = await productManagerMongoose.filteredGetProducts({
-//       page,
-//       limit,
-//       sort,
-//       queryField
-//     });
-
-//     // Renderiza la vista "home" con los productos y parámetros de consulta
-//     res.render("home", {
-//       products: products.docs,  // Usa products.docs en lugar de products
-//       page,
-//       limit,
-//       sort,
-//       queryField,
-//       totalPages: products.totalPages,
-//       hasPrevPage: products.hasPrevPage,
-//       hasNextPage: products.hasNextPage,
-//       prevLink: products.prevPage ? `/?page=${products.prevPage}&limit=${limit}&sort=${sort}&query=${queryField}` : null,
-//       nextLink: products.nextPage ? `/?page=${products.nextPage}&limit=${limit}&sort=${sort}&query=${queryField}` : null,
-//     });
-//   } catch (error) {
-//     console.error("Error en la ruta principal:", error);
-//     res.status(500).send("Error interno del servidor: " + error.message);
-//   }
-// });
 
 
 //////////////////////////////////////////////////////////////////
@@ -125,24 +93,6 @@ viewsRoutes.get("/chat", async (req, res) => {
   }
 });
 
-
-
-
-//Funcionalidad de traer productos con fileSystem
-// viewsRoutes.get("/realTimeProducts", async (req, res) => {
-//   try {
-//     //logica para cargar las cosas con FS
-//     // const products = await fsproductManager.getProducts();
-
-//     //logica para cargar las cosas con Mongoose
-//     let products = await productManagerMongoose.getProducts()
-//     products = products.map(product => ({ ...product.toObject() }));
-//     res.render("realTimeProducts", { products });
-//   } catch (error) {
-//     console.error("Error en la realTimeProducts:", error);
-//     res.status(500).send("Error interno del servidor: " + error.message);
-//   }
-// });
 
 
 //////////////////////////////////////////////////////////////////
@@ -183,18 +133,6 @@ viewsRoutes.get('/realtimeproducts', async (req, res) => {
 //                      render en /products 
 /////////////////////////////////////////////////////////////////
 
-// viewsRoutes.get('/products', async (req, res) => {
-//   try {
-//     let products = await productManagerMongoose.getProducts();
-//     let user = req.session.user 
-//     // Renderiza una vista con la lista de productos y opciones para ver detalles o agregar al carrito
-//     products = products.map(product => ({ ...product.toObject() }));
-//     res.render('products', { products, user });
-//   } catch (error) {
-//     console.error('Error al obtener la lista de productos:', error);
-//     res.status(500).send('Error interno del servidor: ' + error.message);
-//   }
-// });
 
 // vista de productos particulares
 
@@ -216,19 +154,17 @@ viewsRoutes.get('/products/:productId', async (req, res) => {
 });
 
 // opcion de uso de controllers
-viewsRoutes.get('/products', async (req, res) => {
+viewsRoutes.get("/products", async (req, res) => {
   try {
-    let products = await getAll();
-    let user = req.session.user;
-    // Renderiza una vista con la lista de productos y opciones para ver detalles o agregar al carrito
-    products = products.map(product => ({ ...product.toObject() }));
-    res.render('products', { products, user });
+    const products = await productService.getAll();
+    console.log('products en viewrouter> ' + products)
+    const productData = products.map(product => product.toObject());
+    res.render("products", { products: productData });
   } catch (error) {
-    console.error('Error al obtener la lista de productos:', error);
-    res.status(500).send('Error interno del servidor: ' + error.message);
+    console.error("Error al obtener los productos:", error);
+    res.status(500).send("Error interno del servidor: " + error.message);
   }
 });
-
 
 //////////////////////////////////////////////////////////////////
 //                      render en /carts 

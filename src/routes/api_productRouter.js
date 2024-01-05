@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllProducts, createProduct, getProductById,updateProduct,deleteProduct} from '../controllers/productController.js';
+import { getAllProducts, createProduct, getProductById,updateProduct,deleteProduct} from '../dao/controllers/productController.js';
 const productRouter = express.Router();
 
 // Rutas para productos (http)
