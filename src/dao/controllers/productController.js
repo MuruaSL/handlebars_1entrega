@@ -1,5 +1,7 @@
 import productService from "../services/product.services.js";
 
+//Funcion de recuperacion de los productos desde la base de datos, en caso de que haya req.query, se usa ademas la funcion de filtrado del services
+//para que el listado obtenido ademas sea segun lo especificado por http
 export const getAllProducts = async (req, res) => {
   try {
     const { page, limit, sort, query } = req.query;

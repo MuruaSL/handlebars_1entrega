@@ -153,6 +153,7 @@ viewsRoutes.get('/products/:productId', async (req, res) => {
   }
 });
 
+// renderizado de los productos en /products , aqui tambien se hace la gestion de filtrado por params mediante el controller
 viewsRoutes.get("/products", async (req, res) => {
   try {
     const products = await productController.getAllProducts(req, res);
