@@ -54,11 +54,11 @@ export const createProduct = async (req, res) => {
   }
 };
 
-export const getProductById = async (req, res) => {
-  const productId = parseInt(req.params.pid);
+export const getProductById = async (pid) => {
+  
   try {
-    const product = await productService.getProductById(productId);
-    res.json(product);
+    return await productService.getProductById(pid);
+    
   } catch (error) {
     res.status(404).json({ error: "Producto no encontrado" });
   }

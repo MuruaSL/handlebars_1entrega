@@ -1,4 +1,4 @@
-import cartManager from "../dao/managers/fs.cartManager.js";
+import cartService from "../services/cart.services.js";
 
 // Crea un nuevo carrito
 export const createCart = (req, res) => {
@@ -12,15 +12,14 @@ export const createCart = (req, res) => {
   }
 };
 // Obtiene un carrito por su ID
-export const getCartById = (req, res) => {
-  const cartId = req.params.cartId;
-  const cart = cartManager.getCartById(cartId);
-  if (cart) {
-    res.json(cart);
-  } else {
-    res.status(404).json({ error: "Carrito no encontrado" });
+export const getCartById = async (cid) => {
+  try{
+    return await cartService.getCartById(cid);
+    }catch(error){
+    res.status(404).json({ error: "Carrito no encontrado"})
   }
 };
+
 // Agrega un producto al carrito
 export const addToCart = (req, res) => {
   const cartId = req.params.cid;
@@ -33,3 +32,4 @@ export const addToCart = (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+

@@ -11,7 +11,11 @@ const UserModel = mongoose.model('users', new mongoose.Schema({
     role: {
         type: String,
         default:'user'
-    }
+    },
+    cart: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Cart', 
+    },
 }))
 
 export default UserModel

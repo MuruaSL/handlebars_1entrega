@@ -4,9 +4,11 @@ import productManagerMongoose from "../dao/managers/mongoose.productManager.js";
 import productsModel from "../dao/models/products-schema.js";
 import CartModel from "../dao/models/cart-schema.js";
 import passport from "passport";
-import viewsController from "../dao/controllers/viewsController.js";
 import * as productController from '../dao/controllers/productController.js'
+import * as cartController from "../dao/controllers/cartController.js";
+
 import productService from "../dao/services/product.services.js";
+import cartService from "../dao/services/cart.services.js";
 const viewsRoutes = express.Router();
 
 
@@ -139,7 +141,7 @@ viewsRoutes.get('/realtimeproducts', async (req, res) => {
 viewsRoutes.get('/products/:productId', async (req, res) => {
   try {
     const productId = req.params.productId;
-    const product = await productService.getProductById(productId);
+    const product = await productController.getProductById(productId);
 
     if (!product) {
       return res.status(404).send('Producto no encontrado');
@@ -177,15 +179,15 @@ viewsRoutes.get("/products", async (req, res) => {
 //                      render en /carts 
 /////////////////////////////////////////////////////////////////
 // Ruta para mostrar un carrito específico por su ID
+
 viewsRoutes.get('/carts/:cid', async (req, res) => {
   try {
-    const { cid } = req.params;
-    let cart = await CartModel.findById(cid);
-
+    const cid  = req.params.cid;
+    const cart = await cartController.getCartById(cid);
+    
     if (!cart) {
       return res.status(404).send('Carrito no encontrado');
     }
-
     // Renderiza una vista con los productos que pertenecen al carrito
     const products = cart.productos.map(product => ({ ...product.toObject() }));
      // Crear un arreglo para almacenar los detalles completos de los productos
@@ -193,7 +195,7 @@ viewsRoutes.get('/carts/:cid', async (req, res) => {
 
     // Recorrer los productos en el carrito y buscar sus detalles en la base de datos
     for (const product of products) {
-      const productDetail = await productsModel.findById(product.producto);
+      const productDetail = await productController.getProductById(product.producto);
       if (productDetail) {
         // Agregar los detalles del producto al arreglo
         productDetails.push({ ...productDetail.toObject(), cantidad: product.cantidad });
