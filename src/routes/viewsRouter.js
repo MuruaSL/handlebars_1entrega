@@ -139,7 +139,7 @@ viewsRoutes.get('/realtimeproducts', async (req, res) => {
 viewsRoutes.get('/products/:productId', async (req, res) => {
   try {
     const productId = req.params.productId;
-    const product = await productManagerMongoose.getProductById((productId.toString()));
+    const product = await productService.getProductById(productId);
 
     if (!product) {
       return res.status(404).send('Producto no encontrado');
@@ -153,18 +153,24 @@ viewsRoutes.get('/products/:productId', async (req, res) => {
   }
 });
 
-// opcion de uso de controllers
 viewsRoutes.get("/products", async (req, res) => {
   try {
-    const products = await productService.getAll();
-    console.log('products en viewrouter> ' + products)
-    const productData = products.map(product => product.toObject());
-    res.render("products", { products: productData });
+    const products = await productController.getAllProducts(req, res);
+
+    if (!products || !Array.isArray(products)) {
+      // Si products es undefined o no es un array, devuelve un error
+      throw new Error("Los productos no se han obtenido correctamente.");
+    }
+
+    // const productData = products.map(product => product.toObject());
+    res.render("products", {products});
   } catch (error) {
     console.error("Error al obtener los productos:", error);
     res.status(500).send("Error interno del servidor: " + error.message);
   }
 });
+
+
 
 //////////////////////////////////////////////////////////////////
 //                      render en /carts 

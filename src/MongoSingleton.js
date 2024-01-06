@@ -35,9 +35,3 @@ export default class MongoSingleton {
     })
   }
 }
-
-// No se ejecuta la conexión aquí, sino al llamar explícitamente al método `connect`
-// MongoSingleton.getInstance()
-
-
-

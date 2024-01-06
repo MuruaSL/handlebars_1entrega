@@ -4,7 +4,6 @@ class ProductService {
     async getAll() {
         try {
           const products = await productsModel.find().exec();
-        //   console.log('products en service> ' + products)
           return products;
         } catch (error) {
           throw new Error(
@@ -78,7 +77,47 @@ async delete(productId) {
     throw new Error("Error al eliminar el producto: " + error.message);
     }
 }
+
+async filteredGetProducts({ page, limit, sort, queryField }) {
+    try {
+        const sortOptions = {};
+        sortOptions[queryField] = sort === 'asc' ? 1 : -1;
+
+        const filter = {};
+
+        if (queryField == 'title') {
+            filter.title = new RegExp(queryField, 'i');
+        }
+
+        if (queryField == 'priceRange') {
+            const { minPrice, maxPrice } = req.query;
+            filter.price = { $gte: minPrice, $lte: maxPrice };
+        }
+
+        if (queryField == 'category') {
+            const { category } = req.query;
+            filter.category = category;
+        }
+
+        const result = await productsModel.paginate(filter, {
+            page,
+            limit,
+            lean: true,
+            sort: sortOptions,
+        });
+
+        return result.docs || []; // Devolver los documentos o un array vacío si no hay resultados
+    } catch (error) {
+        throw new Error(
+            "Error al obtener los productos filtrados de la base de datos: " + error.message
+        );
+    }
 }
+
+}
+
+
+
 
 const productService = new ProductService();
 

@@ -2,31 +2,44 @@ import productService from "../services/product.services.js";
 
 export const getAllProducts = async (req, res) => {
   try {
-    const products = await productService.getAll();
-    const { limit } = req?.query || products.length; 
-    if (limit) {
-      const limitedProducts = products.slice(0, parseInt(limit));
-      if (res) {
-        res.json(limitedProducts);
-      } else {
-        console.error("No se puede enviar la respuesta porque res no está definido.");
-      }
+    const { page, limit, sort, query } = req.query;
+    // console.log("Params:", { page, limit, sort, query });
+    const hasFilterParams = page || limit || sort || query;
+    // console.log("Has filter params:", hasFilterParams);
+
+    let products;
+
+    if (hasFilterParams) {
+      products = await productService.filteredGetProducts({
+        page,
+        limit,
+        sort,
+        query,
+      });
     } else {
-      if (res) {
-        res.json(products);
-      } else {
-        console.error("No se puede enviar la respuesta porque res no está definido.");
-      }
+      products = await productService.getAll();
     }
+
+    if (!products) {
+      throw new Error("Los productos no se han obtenido correctamente.");
+    }
+
+    // Si los productos son documentos de Mongoose, los convertimos a objetos
+    const processedProducts = Array.isArray(products)
+      ? products.map(product => (product.toObject ? product.toObject() : product))
+      : products.toObject
+      ? products.toObject()
+      : products;
+
+    return processedProducts;
   } catch (error) {
     console.error("Error al obtener los productos:", error);
-    if (res) {
-      res.status(500).json({ error: "Error al obtener los productos", message: error.message });
-    } else {
-      console.error("No se puede enviar la respuesta de error porque res no está definido.");
-    }
+    // Enviar una respuesta de error
+    res.status(500).send("Error interno del servidor: " + error.message);
   }
 };
+
+
 
 
 export const createProduct = async (req, res) => {
