@@ -6,7 +6,7 @@ import CartModel from "../dao/models/cart-schema.js";
 import passport from "passport";
 import * as productController from '../dao/controllers/productController.js'
 import * as cartController from "../dao/controllers/cartController.js";
-
+import * as chatController from "../dao/controllers/chatController.js"
 import productService from "../dao/services/product.services.js";
 import cartService from "../dao/services/cart.services.js";
 const viewsRoutes = express.Router();
@@ -87,41 +87,77 @@ export default viewsRoutes;
 
 viewsRoutes.get("/chat", async (req, res) => {
   try {
-    const AllMessages = await MessageManagerMongoose.getMessages();
-    res.render("chat",{AllMessages});
+    const AllMessages = await chatController.getMessages();
+    console.log(AllMessages)
+    res.render("chat", { AllMessages });
   } catch (error) {
-    console.error("Error en la pagina Chat:", error);
+    console.error("Error en la página Chat:", error);
     res.status(500).send("Error interno del servidor: " + error.message);
   }
 });
 
 
 
+
 //////////////////////////////////////////////////////////////////
 //                      render en /realtimeproducts 
 /////////////////////////////////////////////////////////////////
-viewsRoutes.get('/realtimeproducts', async (req, res) => {
+// viewsRoutes.get('/realtimeproducts', async (req, res) => {
+//   try {
+//     const { page, limit, sort, query } = req.query;
+
+//     // Llama directamente al controlador para obtener los productos
+//     const products = await productController.getAllProducts(req, res);
+//     console.log(products)
+//     console.log(products.docs); // Verifica que products.docs contiene los datos esperados
+
+//     // Renderiza la plantilla realTimeProducts con los datos obtenidos
+//     res.render('realTimeProducts', {
+//       docs: products.docs,
+//       totalPages: products.totalPages,
+//       hasPrevPage: products.hasPrevPage,
+//       hasNextPage: products.hasNextPage,
+//       prevLink: products.hasPrevPage
+//         ? `/realtimeproducts?page=${products.prevPage}&limit=${limit}&sort=${sort}&query=${query}`
+//         : null,
+//       nextLink: products.hasNextPage
+//         ? `/realtimeproducts?page=${products.nextPage}&limit=${limit}&sort=${sort}&query=${query}`
+//         : null,
+//     });
+//   } catch (error) {
+//     console.error("Error en la ruta /realtimeproducts:", error);
+//     res.status(500).json({ status: 'error', message: error.message });
+//   }
+// });
+
+
+
+/////////////////////////////////////////////////////////////////////////
+///////////////Render en /api/realtimeproducts como json////////////////
+////////////////////////////////////////////////////////////////////////
+viewsRoutes.get('/api/realtimeproducts', async (req, res) => {
   try {
-    const page = parseInt(req.query.page ?? 1);
-    const limit = parseInt(req.query.limit ?? 10);
-    const sort = req.query.sort ?? 'asc';
-    const queryField = req.query.query ?? 'title';
+    const { page, limit, sort, query } = req.query;
 
-    // Utiliza la función filteredGetProducts para obtener los productos
-    const result = await productManagerMongoose.filteredGetProducts({ page, limit, sort, queryField });
+    // Llama directamente al controlador para obtener los productos
+    const products = await productController.getAllProducts(req, res);
 
-    // Crea el objeto de respuesta siguiendo el formato que mencionaste
+    // Crea el objeto de respuesta 
     const response = {
       status: 'success', // O 'error' en caso de error
-      payload: result,
-      totalPages: result.totalPages,
-      prevPage: result.prevPage,
-      nextPage: result.nextPage,
-      page: result.page,
-      hasPrevPage: result.hasPrevPage,
-      hasNextPage: result.hasNextPage,
-      prevLink: result.hasPrevPage ? `/realtimeproducts?page=${result.prevPage}&limit=${limit}&sort=${sort}&query=${queryField}` : null,
-      nextLink: result.hasNextPage ? `/realtimeproducts?page=${result.nextPage}&limit=${limit}&sort=${sort}&query=${queryField}` : null,
+      payload: products,
+      totalPages: products.totalPages,
+      prevPage: products.prevPage,
+      nextPage: products.nextPage,
+      page: products.page,
+      hasPrevPage: products.hasPrevPage,
+      hasNextPage: products.hasNextPage,
+      prevLink: products.hasPrevPage
+        ? `/realtimeproducts?page=${products.prevPage}&limit=${limit}&sort=${sort}&query=${query}`
+        : null,
+      nextLink: products.hasNextPage
+        ? `/realtimeproducts?page=${products.nextPage}&limit=${limit}&sort=${sort}&query=${query}`
+        : null,
     };
 
     res.json(response);
