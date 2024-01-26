@@ -91,7 +91,6 @@ io.on("connection", (socket) => {
     try {
         // Obtener el carrito existente o crear uno nuevo
         const cart = await cartController.getOneCart();
-        let updatedCart;  // Definir la variable fuera de las condicionales
         let cid = cart._id
         if (cart) {
             // Verificar si el producto ya está en el carrito
@@ -107,17 +106,11 @@ io.on("connection", (socket) => {
                 await cartController.addToCart(cid, productId, { cantidad: 1 });
                 console.log('Producto agregado al carrito. Carrito actualizado');
             }
-
-            // // Emitir evento a todos los clientes actualizando el carrito
-            // io.emit('updateCart', { cart: updatedCart });
-
-            // // Emitir un mensaje de éxito
-            // socket.emit('addToCartSuccess', { message: 'Producto agregado al carrito correctamente' });
         } else {
             // Puedes manejar la lógica aquí si el carrito no se encuentra
             console.error('Carrito no encontrado');
             socket.emit('addToCartError', { error: 'Carrito no encontrado' });
-        }
+          }
     } catch (error) {
         console.error('Error al agregar producto al carrito:', error);
         // Puedes emitir un evento de error si es necesario
