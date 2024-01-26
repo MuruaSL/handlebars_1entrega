@@ -41,7 +41,7 @@ class CartService {
       const updatedCart = await cart.save();
       return updatedCart;
     } catch (error) {
-      console.error('Error al agregar producto al carrito:', error);
+      // console.error('Error al agregar producto al carrito:', error);
       throw new Error('Error al agregar producto al carrito: ' + error.message);
     }
   }

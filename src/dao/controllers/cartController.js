@@ -30,11 +30,11 @@ export const getOneCart = async (req, res) => {
 };
 
 // Agrega un producto al carrito
-export const addToCart = async (cid, productId,cantidad) => {
+export const addToCart = async (cid, productId, cantidad) => {
   try {
-    cartService.addToCart(cid, productId, cantidad);
+    await cartService.addToCart(cid, productId, cantidad);
   } catch (error) {
-    console.log("error> "+ error)
+    console.log("error> " + error);
   }
 };
 

@@ -9,9 +9,8 @@ const productForm = document.getElementById("addProductToCart");
 productForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-        // Obener el valor del _id del formulario
+        // Obtener el valor del _id del formulario
         const productId = productForm.dataset.id;
-    
         // Emitir el evento addToCart al servidor
-        socket.emit('addToCart', { productId });
+        socket.emit('addToCart', productId);
 });

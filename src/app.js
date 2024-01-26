@@ -79,13 +79,18 @@ const io = new SocketIOServer(server);
 io.on("connection", (socket) => {
   console.log(`Cliente conectado: ${socket.id}`);
 
+  //-------------------------------//
+  //----- funciones del socket ----//
+  //-------------------------------//
+
+    
   socket.on('addProduct', (producto) => {
     console.log('Se agrego el producto correctamente')
     console.log(producto)
     productConstroller.addProduct(producto)
-    // productManagerMongoose.addProduct(producto)
   });
 
+  // en /products boton de agregar al carrito
   //accion addtocart de products y productsDetails.hanlebars mediante products.js
   socket.on('addToCart', async (productId ) => {
     try {
@@ -119,16 +124,6 @@ io.on("connection", (socket) => {
 });
 
 
-  socket.on('deleteProduct', async(product_code) => {
-    //mongoose 
-    const mongoose_product = productManagerMongoose.getProductByCode(product_code)
-    productManagerMongoose.deleteProductById(mongoose_product.__id)
-    console.log('Se Elimino el producto correctamente')
-    // fs
-    // const fs_id = productManager.getProductByCode(product_code)
-    // productManager.deleteProduct(fs_id);
-
-  });
 
   socket.on('addMessage', (messageData) => {
     console.log('mensaje enviado');
@@ -142,6 +137,20 @@ io.on("connection", (socket) => {
   });
 
 });
+
+// ------------------------actualmente en desuso-----------------------
+// // eliminacion de un producto de la bd (no del carrito)
+// socket.on('deleteProduct', async(product_code) => {
+//   //mongoose 
+//   const mongoose_product = productManagerMongoose.getProductByCode(product_code)
+//   productManagerMongoose.deleteProductById(mongoose_product.__id)
+//   console.log('Se Elimino el producto correctamente')
+//   // fs
+//   // const fs_id = productManager.getProductByCode(product_code)
+//   // productManager.deleteProduct(fs_id);
+
+// });
+
 
 /////////////////////////////
 //   conectamos mongoose  ///
