@@ -17,9 +17,7 @@ import cartRouter from "./routes/api_cartRouter.js";
 import viewsRouter from "./routes/viewsRouter.js";
 import sessionRouter from "./routes/session.router.js";
 //Managers
-import productManagerMongoose from "./dao/managers/mongoose.productManager.js";
-import mongooseChatManager from "./dao/managers/mongoose.chatManager.js";
-import CartManagerMongoose from "./dao/managers/mongoose.cartManager.js";
+
 import * as productConstroller from "./dao/controllers/productController.js"
 import * as cartController from "./dao/controllers/cartController.js"
 import * as chatController from "./dao/controllers/chatController.js"

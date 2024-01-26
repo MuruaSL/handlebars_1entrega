@@ -1,14 +1,9 @@
 import express from "express";
-import MessageManagerMongoose from "../dao/managers/mongoose.chatManager.js";
-import productManagerMongoose from "../dao/managers/mongoose.productManager.js";
-import productsModel from "../dao/models/products-schema.js";
-import CartModel from "../dao/models/cart-schema.js";
 import passport from "passport";
 import * as productController from '../dao/controllers/productController.js'
 import * as cartController from "../dao/controllers/cartController.js";
 import * as chatController from "../dao/controllers/chatController.js"
-import productService from "../dao/services/product.services.js";
-import cartService from "../dao/services/cart.services.js";
+
 const viewsRoutes = express.Router();
 
 
