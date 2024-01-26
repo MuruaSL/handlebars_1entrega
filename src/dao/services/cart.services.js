@@ -142,7 +142,7 @@ async updatedCartTotal(cid){
       { $set: { total: total } },
       { new: true }
     );
-    console.log("cantidad total> "+ updatedCart.total )
+    
     return updatedCart;
   } catch (error) {
     throw new Error("Error al actualizar el total del carrito: " + error.message);

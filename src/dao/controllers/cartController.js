@@ -33,9 +33,8 @@ export const getOneCart = async (req, res) => {
 export const addToCart = async (cid, productId,cantidad) => {
   try {
     cartService.addToCart(cid, productId, cantidad);
-    console.log("Se agrego el nuevo producto al carrito")
   } catch (error) {
-    console.log("error >"+ error)
+    console.log("error> "+ error)
   }
 };
 
@@ -43,7 +42,6 @@ export const updateCartQuantity = async (cid,existingProduct) => {
   try {
     await cartService.updateCartQuantity(cid, existingProduct);
     await cartService.updatedCartTotal(cid)
-    console.log("cantidad de productos actualizada")
   } catch (error) {
     console.log(error +  "Error al actualizar el carrito");
   }

@@ -101,18 +101,18 @@ io.on("connection", (socket) => {
                 existingProduct.cantidad += 1;
                 // Utiliza la función updateCartItem para actualizar la cantidad del producto en el carrito
                 await cartController.updateCartQuantity(cid,existingProduct);
-                console.log('Producto existente encontrado. Carrito actualizado');
+                console.log('Producto en el carrito. Cantidad actualizada');
             } else {
                 // Si el producto no existe en el carrito, llama a la función addToCart del CartManager
                 await cartController.addToCart(cid, productId, { cantidad: 1 });
                 console.log('Producto agregado al carrito. Carrito actualizado');
             }
 
-            // Emitir evento a todos los clientes actualizando el carrito
-            io.emit('updateCart', { cart: updatedCart });
+            // // Emitir evento a todos los clientes actualizando el carrito
+            // io.emit('updateCart', { cart: updatedCart });
 
-            // Emitir un mensaje de éxito
-            socket.emit('addToCartSuccess', { message: 'Producto agregado al carrito correctamente' });
+            // // Emitir un mensaje de éxito
+            // socket.emit('addToCartSuccess', { message: 'Producto agregado al carrito correctamente' });
         } else {
             // Puedes manejar la lógica aquí si el carrito no se encuentra
             console.error('Carrito no encontrado');
