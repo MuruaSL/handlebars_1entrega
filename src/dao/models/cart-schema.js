@@ -18,6 +18,7 @@ const carritoSchema = new mongoose.Schema({
       }
     },
   ],
+  total: Number
 });
 
 // Registra el modelo de carritos

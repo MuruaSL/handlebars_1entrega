@@ -10,9 +10,16 @@ export const getMessages = async (req, res) => {
         res.status(500).send("Error interno del servidor: " + error.message);
     }
 };
-  
 
-export const addMessage = async (req, res) => {
-    chatServices.addMessage({user,messaje})    
+
+export const addMessage = async (messageData) => {
+    try {
+        const { user, message } = messageData; // Desestructura
+        await chatServices.addMessage(user, message);
+    } catch (error) {
+        console.error("Error al procesar el mensaje:", error);
+        
+    }
 };
+
 

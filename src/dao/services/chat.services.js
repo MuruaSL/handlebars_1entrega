@@ -3,20 +3,29 @@ import MessageModel from "../models/message-schema.js"
 class chatServices {
   // Agregar los métodos necesarios para interactuar con la base de datos MongoDB utilizando Mongoose
 
-  async addMessage({ user,message }) {
-    // Agregar la lógica para crear un nuevo producto en la base de datos utilizando el modelo de Mongoose
+  async addMessage(user, message) {
+    console.log("messageData en chatServices: " + user + "message> " + message);
+
+    if (!user || !message) {
+        throw new Error("Datos de mensaje incompletos");
+    }
+
     const newMessage = new MessageModel({
-      user,
-      message
+        user,
+        message
     });
 
     try {
-      await newMessage.save();
-      return newMessage;
+        await newMessage.save();
+        return newMessage;
     } catch (error) {
-      throw new Error("Error al agregar el producto a la base de datos: " + error.message);
+        throw new Error("Error al agregar el mensaje a la base de datos: " + error.message);
     }
-  }
+}
+
+
+
+
 
   async getMessages() {
     try {

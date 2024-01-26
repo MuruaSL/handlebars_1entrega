@@ -17,7 +17,8 @@ document.addEventListener("DOMContentLoaded", () => {
             const productId = event.target.dataset.id;
 
             // Emitir el evento addToCart al servidor
-            socket.emit('addToCart', { productId });
+            console.log("en productForms.js" + productId)
+            socket.emit('addToCart', productId );
         });
     });
 });

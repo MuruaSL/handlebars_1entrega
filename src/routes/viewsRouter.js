@@ -88,7 +88,6 @@ export default viewsRoutes;
 viewsRoutes.get("/chat", async (req, res) => {
   try {
     const AllMessages = await chatController.getMessages();
-    console.log(AllMessages)
     res.render("chat", { AllMessages });
   } catch (error) {
     console.error("Error en la página Chat:", error);

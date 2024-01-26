@@ -20,7 +20,9 @@ import sessionRouter from "./routes/session.router.js";
 import productManagerMongoose from "./dao/managers/mongoose.productManager.js";
 import mongooseChatManager from "./dao/managers/mongoose.chatManager.js";
 import CartManagerMongoose from "./dao/managers/mongoose.cartManager.js";
-
+import * as productConstroller from "./dao/controllers/productController.js"
+import * as cartController from "./dao/controllers/cartController.js"
+import * as chatController from "./dao/controllers/chatController.js"
 
 //inicializacion de servidor // variables mongo
 const mongoUrl = 'mongodb+srv://leonardomurua:Dd40521547-4618@clusterleonardo.hg2jvxi.mongodb.net/?retryWrites=true&w=majority'
@@ -80,32 +82,30 @@ io.on("connection", (socket) => {
   socket.on('addProduct', (producto) => {
     console.log('Se agrego el producto correctamente')
     console.log(producto)
-    productManagerMongoose.addProduct(producto)
-    // productManager.addProduct(producto);
+    productConstroller.addProduct(producto)
+    // productManagerMongoose.addProduct(producto)
   });
 
   //accion addtocart de products y productsDetails.hanlebars mediante products.js
-  socket.on('addToCart', async ({ productId }) => {
+  socket.on('addToCart', async (productId ) => {
     try {
         // Obtener el carrito existente o crear uno nuevo
-        const cart = await CartManagerMongoose.getOneCart({});
+        const cart = await cartController.getOneCart();
         let updatedCart;  // Definir la variable fuera de las condicionales
-
+        let cid = cart._id
         if (cart) {
             // Verificar si el producto ya está en el carrito
             const existingProduct = cart.productos && Array.isArray(cart.productos) && cart.productos.find((product) => product && product.producto && product.producto.toString() === productId);
-
             if (existingProduct) {
                 // Si el producto ya existe, actualiza la cantidad en lugar de agregar un nuevo elemento
                 existingProduct.cantidad += 1;
-
                 // Utiliza la función updateCartItem para actualizar la cantidad del producto en el carrito
-                updatedCart = await CartManagerMongoose.updateCartItem(cart._id, productId, existingProduct.cantidad);
-                console.log('Producto existente encontrado. Carrito actualizado:', updatedCart);
+                await cartController.updateCartQuantity(cid,existingProduct);
+                console.log('Producto existente encontrado. Carrito actualizado');
             } else {
                 // Si el producto no existe en el carrito, llama a la función addToCart del CartManager
-                updatedCart = await CartManagerMongoose.addToCart(cart._id, productId, { cantidad: 1 });
-                console.log('Producto agregado al carrito. Carrito actualizado:', updatedCart);
+                await cartController.addToCart(cid, productId, { cantidad: 1 });
+                console.log('Producto agregado al carrito. Carrito actualizado');
             }
 
             // Emitir evento a todos los clientes actualizando el carrito
@@ -137,12 +137,12 @@ io.on("connection", (socket) => {
 
   });
 
-  socket.on('addMessage', (message) => {
-    console.log('mensaje enviado')
-    console.log(message)
-    mongooseChatManager.addMessage(message)
-    
-  });
+  socket.on('addMessage', (messageData) => {
+    console.log('mensaje enviado');
+    chatController.addMessage(messageData);
+});
+
+
 
   socket.on("disconnect", () => {
     console.log(`Cliente desconectado: ${socket.id}`);

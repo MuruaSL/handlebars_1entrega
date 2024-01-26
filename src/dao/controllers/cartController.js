@@ -1,3 +1,4 @@
+import { json } from "express";
 import cartService from "../services/cart.services.js";
 
 // Crea un nuevo carrito
@@ -19,17 +20,32 @@ export const getCartById = async (cid) => {
     res.status(404).json({ error: "Carrito no encontrado"})
   }
 };
+export const getOneCart = async (req, res) => {
+  try {
+    const cart = await cartService.getOneCart();
+    return cart;
+  } catch (error) {
+    res.status(404).json({ error: "Carrito no encontrado" });
+  }
+};
 
 // Agrega un producto al carrito
-export const addToCart = (req, res) => {
-  const cartId = req.params.cid;
-  const productId = parseInt(req.params.pid); // Parsea el ID del producto como un número
-  const { quantity } = req.body;
+export const addToCart = async (cid, productId,cantidad) => {
   try {
-    const updatedCart = cartManager.addToCart(cartId, productId, quantity);
-    res.json(updatedCart);
+    cartService.addToCart(cid, productId, cantidad);
+    console.log("Se agrego el nuevo producto al carrito")
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    console.log("error >"+ error)
+  }
+};
+
+export const updateCartQuantity = async (cid,existingProduct) => {
+  try {
+    await cartService.updateCartQuantity(cid, existingProduct);
+    await cartService.updatedCartTotal(cid)
+    console.log("cantidad de productos actualizada")
+  } catch (error) {
+    console.log(error +  "Error al actualizar el carrito");
   }
 };
 
