@@ -239,3 +239,15 @@ viewsRoutes.get('/carts/:cid', async (req, res) => {
   }
 });
 
+
+//////////////////////////////////////////////////////////////////
+//                      Vista control de logger 
+/////////////////////////////////////////////////////////////////
+viewsRoutes.get('/loggertest', (req, res) => {
+  req.logger.error('error')
+  req.logger.info('info')
+  req.logger.warning('warning')
+  req.logger.debugg('debug')
+  req.logger.error('error')
+  req.logger.fatal('FATAL')
+})
