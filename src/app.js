@@ -22,11 +22,16 @@ import * as productConstroller from "./dao/controllers/productController.js"
 import * as cartController from "./dao/controllers/cartController.js"
 import * as chatController from "./dao/controllers/chatController.js"
 
+//logger
+import {addLogger} from './logger.js'
 //inicializacion de servidor // variables mongo
 const mongoUrl = 'mongodb+srv://leonardomurua:Dd40521547-4618@clusterleonardo.hg2jvxi.mongodb.net/?retryWrites=true&w=majority'
 const mongoDBName = 'ecommerse'
 const app = express();
 const port = 8080;
+
+//aplicar el logger
+app.use(addLogger)
 
 // Configuracion Sessions
 app.use(session({
