@@ -7,22 +7,27 @@ const customLevelOption = {
         warning:2,
         info:3,
         http:4,
-        debugg:5
+        debug:5
     }
 }
 
 export const logger = winston.createLogger({
     levels:customLevelOption.levels,
     transports:[
-        new winston.transports.Console({level:'http'}),
-        new winston.transports.File({filename:'./errors.log',level:'1'}),
+        new winston.transports.Console({
+            level:'http',
+            format:winston.format.simple()
+        }),
+        new winston.transports.File({ filename: './errors.log',level:'error'}),
     ]
 })
 
 
 export const addLogger = (req,res,next)=>{
     req.logger = logger
-    req.logger.http(`[${req.method}] ${req.url} - ${new Date().toLocaleDateString()}`)
+
+    req.logger.info(`[${req.method}] ${req.url} - ${new Date().toLocaleDateString()}`)
+    
     next()
 }
 

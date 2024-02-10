@@ -9,8 +9,7 @@ const viewsController = {
         products: JSON.stringify(products),
       });
     } catch (error) {
-      console.error("Error al obtener los productos:", error);
-      res.status(500).send("Error interno del servidor: " + error.message);
+      req.logger.error("Error al obtener los productos:", error.message);
     }
   },
 };

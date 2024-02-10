@@ -85,7 +85,7 @@ viewsRoutes.get("/chat", async (req, res) => {
     const AllMessages = await chatController.getMessages();
     res.render("chat", { AllMessages });
   } catch (error) {
-    console.error("Error en la página Chat:", error);
+    req.logger.error("Error en la página Chat:", error);
     res.status(500).send("Error interno del servidor: " + error.message);
   }
 });
@@ -156,7 +156,7 @@ viewsRoutes.get('/api/realtimeproducts', async (req, res) => {
 
     res.json(response);
   } catch (error) {
-    console.error("Error en la ruta /realtimeproducts:", error);
+    req.logger.error("Error en la ruta /realtimeproducts:", error);
     res.status(500).json({ status: 'error', message: error.message });
   }
 });
@@ -180,7 +180,7 @@ viewsRoutes.get('/products/:productId', async (req, res) => {
     const productData = { ...product.toObject() };
     res.render('productDetail', { product: productData });
   } catch (error) {
-    console.error('Error al obtener detalles del producto:', error);
+    req.logger.error('Error al obtener detalles del producto:', error);
     res.status(500).send('Error interno del servidor: ' + error.message);
   }
 });
@@ -196,9 +196,10 @@ viewsRoutes.get("/products", async (req, res) => {
     }
 
     // const productData = products.map(product => product.toObject());
+    req.logger.info("Los productos se cargaron correctamente.");
     res.render("products", {products});
   } catch (error) {
-    console.error("Error al obtener los productos:", error);
+    req.logger.error("Error al obtener los productos:", error);
     res.status(500).send("Error interno del servidor: " + error.message);
   }
 });
@@ -234,7 +235,7 @@ viewsRoutes.get('/carts/:cid', async (req, res) => {
     res.render('cart', { products:productDetails });
 
   } catch (error) {
-    console.error('Error al obtener el carrito:', error);
+    req.logger.error('Error al obtener el carrito:', error);
     res.status(500).send('Error interno del servidor: ' + error.message);
   }
 });
@@ -244,10 +245,11 @@ viewsRoutes.get('/carts/:cid', async (req, res) => {
 //                      Vista control de logger 
 /////////////////////////////////////////////////////////////////
 viewsRoutes.get('/loggertest', (req, res) => {
-  req.logger.error('error')
-  req.logger.info('info')
-  req.logger.warning('warning')
-  req.logger.debugg('debug')
-  req.logger.error('error')
-  req.logger.fatal('FATAL')
+      req.logger.info('info en /loggertest');
+      req.logger.warning('warning en /loggertest');
+      req.logger.debug('debug en /loggertest');
+      req.logger.error('error en /loggertest');
+      req.logger.fatal('FATAL en /loggertest');
+      res.send('Mensajes de registro enviados correctamente');
+      
 })

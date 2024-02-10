@@ -23,7 +23,7 @@ export const getAllProducts = async (req, res) => {
     }
 
     if (!products) {
-      throw new Error("Los productos no se han obtenido correctamente.");
+      req.logger.error("Los productos no se han obtenido correctamente.");
     }
 
     // Si los productos son documentos de Mongoose, los convertimos a objetos
@@ -35,7 +35,7 @@ export const getAllProducts = async (req, res) => {
 
     return processedProducts;
   } catch (error) {
-    console.error("Error al obtener los productos:", error);
+    req.logger.error("Error al obtener los productos:", error);
     // Enviar una respuesta de error
     res.status(500).send("Error interno del servidor: " + error.message);
   }
@@ -49,8 +49,9 @@ export const createProduct = async (req, res) => {
   try {
     const newProduct = await productService.create(productData);
     res.status(201).json(newProduct);
+    req.logger.info(json("nuevo producto: "+ newProduct))
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    req.logger.error(error.message);
   }
 };
 
@@ -60,7 +61,7 @@ export const getProductById = async (pid) => {
     return await productService.getProductById(pid);
     
   } catch (error) {
-    res.status(404).json({ error: "Producto no encontrado" });
+    req.logger.error("producto no encontrado")
   }
 };
 
@@ -70,17 +71,18 @@ export const updateProduct = async (req, res) => {
   try {
     const updatedProduct = await productService.update(productId, updatedData);
     res.json(updatedProduct);
+    req.logger.info('producto modificado correctamente: '+ json(updatedProduct))
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    req.logger.error("Hubo un problema al modificar el producto> "+error.message)
   }
 };
 
 export const deleteProduct = async (req, res) => {
   const productId = parseInt(req.params.pid);
   try {
-    const deletedMessage = await productService.delete(productId);
-    res.json(`Se eliminó el producto con ID: ${productId}`);
+    await productService.delete(productId);
+    req.logger.info(`Se eliminó el producto con ID: ${productId}`);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    req.logger.error({ error: error.message });
   }
 };
