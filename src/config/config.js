@@ -1,12 +1,14 @@
 import dotenv from 'dotenv';
 
-const environment = 'DEVELOPMENT'
+const environment = 'DEVELOPMENT';
 dotenv.config({
-    path:environment ==="DEVELOPMENT"?'./env.development':'./env.production'
+    path: environment === "DEVELOPMENT" ? './.env.development' : './.env.production'
 });
 
-export default {
+const config = {
     port: process.env.PORT,
     mongoUrl: process.env.MONGO_URL,
     mongoDBName: process.env.MONGO_DB_NAME,
 };
+
+export default config;

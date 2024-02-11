@@ -8,7 +8,6 @@ import MongoStore from 'connect-mongo'
 import session from "express-session";
 import passport from "passport";
 import initializePassport from "./config/passport.config.js";
-import config from "./config/config.js";
 
 
 // Routes
@@ -23,12 +22,19 @@ import * as cartController from "./dao/controllers/cartController.js"
 import * as chatController from "./dao/controllers/chatController.js"
 
 //logger
-import {addLogger} from './logger.js'
+import {addLogger, logger} from './logger.js' // Importar el logger y la función addLogger
+// Obtener la configuración del entorno
+import config from "./config/config.js";
+import dotenv from 'dotenv';
+
+dotenv.config();
 //inicializacion de servidor // variables mongo
-const mongoUrl = 'mongodb+srv://leonardomurua:Dd40521547-4618@clusterleonardo.hg2jvxi.mongodb.net/?retryWrites=true&w=majority'
-const mongoDBName = 'ecommerse'
+
+const mongoUrl = config.mongoUrl;
+const mongoDBName =config.mongoDBName;
+
 const app = express();
-const port = 8080;
+const port = config.port || 8080;
 
 //aplicar el logger
 app.use(addLogger)
@@ -36,7 +42,7 @@ app.use(addLogger)
 // Configuracion Sessions
 app.use(session({
   store: MongoStore.create({
-      mongoUrl,
+      mongoUrl: mongoUrl,
       dbName: mongoDBName,
       mongoOptions:{
         useNewUrlParser: true,
@@ -65,6 +71,9 @@ app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 
+// Configurar el nivel de registro del logger según el entorno
+const logLevel = process.env.NODE_ENV === 'production' ? 'info' : 'debug';
+logger.transports[0].level = logLevel; // Setear el nivel de registro para la consola
 
 
 //////////////////////
@@ -169,3 +178,4 @@ mongoose.connect(mongoUrl,{dbName:mongoDBName})
     .catch(error =>{
         console.error("error connecting to the DB")
     })
+
