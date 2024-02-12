@@ -9,6 +9,8 @@ const config = {
     port: process.env.PORT,
     mongoUrl: process.env.MONGO_URL,
     mongoDBName: process.env.MONGO_DB_NAME,
+    mailUser:process.env.MAIL_USER,
+    mailPass:process.env.MAIL_PASS,
 };
 
 export default config;
