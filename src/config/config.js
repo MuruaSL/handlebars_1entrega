@@ -11,6 +11,7 @@ const config = {
     mongoDBName: process.env.MONGO_DB_NAME,
     mailUser:process.env.MAIL_USER,
     mailPass:process.env.MAIL_PASS,
+    jwtSecret: process.env.JWT_SECRET
 };
 
 export default config;

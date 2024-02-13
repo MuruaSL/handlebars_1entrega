@@ -32,7 +32,6 @@ dotenv.config();
 
 const mongoUrl = config.mongoUrl;
 const mongoDBName =config.mongoDBName;
-
 const app = express();
 const port = config.port || 8080;
 

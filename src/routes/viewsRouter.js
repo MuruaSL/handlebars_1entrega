@@ -3,6 +3,9 @@ import passport from "passport";
 import * as productController from '../dao/controllers/productController.js'
 import * as cartController from "../dao/controllers/cartController.js";
 import * as chatController from "../dao/controllers/chatController.js"
+import { requestPasswordReset } from '../dao/controllers/authController.js';
+import { resetPassword } from '../dao/controllers/authController.js';
+
 
 const viewsRoutes = express.Router();
 
@@ -73,7 +76,59 @@ viewsRoutes.get('/private', auth, (req, res)=>{
   res.json(req.session.user)
 })
 export default viewsRoutes;
+////////////////////////////////////////////////
+//////////// RUTA DE PERDIDA DE PASSWORD////////
+////////////////////////////////////////////////
 
+viewsRoutes.get('/forgot-password', (req, res) => {
+  res.render('forgot-password');
+});
+
+viewsRoutes.post('/forgot-password', async (req, res) => {
+  try {
+    const userOrError = await requestPasswordReset(req.body.email);
+    
+    if (userOrError instanceof Error) {
+      // Si hay un error, manejarlo adecuadamente
+      console.error('Error al solicitar el restablecimiento de contraseña:', userOrError);
+      return res.status(500).json({ message: 'Error interno del servidor' });
+    }
+    
+    // Si el correo electrónico se envió correctamente, redirigir a la página de éxito
+    res.redirect('/forgot-password-success');
+  } catch (error) {
+    console.error('Error al solicitar el restablecimiento de contraseña:', error);
+    return res.status(500).json({ message: 'Error interno del servidor' });
+  }
+});
+
+/// una vez que ingresa al url del mail y envia la nueva contrasena, se entra a este post
+viewsRoutes.post('/reset-password/:token', async (req, res) => {
+  try {
+    const { token } = req.params;
+    const { newPassword } = req.body;
+
+    // Lógica para restablecer la contraseña utilizando el token y la nueva contraseña
+    await resetPassword(token, newPassword);
+
+    // Redireccionar al usuario a una página de éxito o a la página de inicio de sesión
+    res.redirect('/login');
+  } catch (error) {
+    console.error('Error al restablecer la contraseña:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
+});
+
+
+viewsRoutes.get('/forgot-password-success', (req, res) => {
+  res.render('forgot-password-success');
+});
+
+viewsRoutes.get('/reset-password/:token', (req, res) => {
+  const { token } = req.params;
+  // Renderizar la página de restablecimiento de contraseña y pasar el token como contexto
+  res.render('reset-password', { token });
+});
 
 
 //////////////////////////////////////////////////////////////////
