@@ -13,7 +13,7 @@ class ProductService {
       }
 
 async create(data) {
-    const { title, description, price, code, stock, category, thumbnails } =
+    const { title, description, price, code, stock, category, thumbnails, owner } =
     data;
     const newProduct = new productsModel({
     title,
@@ -22,6 +22,7 @@ async create(data) {
     code,
     stock,
     category,
+    owner,
     thumbnails
     });
 

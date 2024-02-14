@@ -22,26 +22,26 @@ sessionrouter.post('/signup', async (req, res) => {
     res.redirect('/login');
 });
 
-
 sessionrouter.post('/login', async (req, res) => {
-    const { email, password } = req.body
-    const user = await UserModel.findOne({ email }).lean().exec()
-    if(!user) return res.redirect('/login')
-    if (!isValidPassword(user,password)) {
-        return res.status(403).send({status:"error",error: "incorrect password"})
+    const { email, password } = req.body;
+    const user = await UserModel.findOne({ email }).lean().exec();
+    if (!user || !isValidPassword(user, password)) {
+        // Si el usuario no existe o la contraseña es incorrecta, devuelve un error
+        return res.status(403).json({ status: 'error', error: 'Correo electrónico o contraseña incorrectos' });
     }
-    req.session.user = user
+    req.session.user = user; // Establece la sesión del usuario
+    res.redirect('/profile'); // Redirige a la página de perfil
+});
 
-    res.redirect('/profile')
-})
-
-sessionrouter.get('/logout', async(req, res) => {
-    req.session.destroy(err => {
-        if(err) return res.send('Logout error')
-
-        res.redirect('/')
-    })
-})
-
+sessionrouter.post('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.error('Error al cerrar sesión:', err);
+            res.status(500).json({ message: 'Error interno del servidor' });
+        } else {
+            res.redirect('/login');
+        }
+    });
+});
 
 export default sessionrouter

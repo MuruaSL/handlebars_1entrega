@@ -1,4 +1,5 @@
 import productService from "../services/product.services.js";
+import { logger } from "../../logger.js";
 
 export const getAllProducts = async (req, res) => {
   try {
@@ -35,19 +36,35 @@ export const getAllProducts = async (req, res) => {
   }
 };
 
-export const createProduct = async (req, res) => {
-  const productData = req.body;
+export const createProduct = async (bodyProduct, sessionUserId) => {
   try {
+    // Verifica si sessionUserId está definido
+    if (!sessionUserId) {
+      throw new Error('Usuario no autenticado');
+    }
+
     // Asignar el ID del usuario como propietario del producto
-    productData.owner = req.user._id; // Suponiendo que el ID del usuario está disponible en req.user
-    const newProduct = await productService.create(productData);
-    res.status(201).json(newProduct);
-    req.logger.info("Nuevo producto creado:", newProduct);
+    const owner = sessionUserId;
+    const newProductData = bodyProduct
+    newProductData.owner = owner
+
+    // Crear el producto utilizando el servicio de productos
+    const newProduct = await productService.create(newProductData);
+
+    // Registrar la creación del nuevo producto
+    logger.info('Nuevo producto creado:', newProduct);
+
+    // Devolver el nuevo producto creado
+    return newProduct;
   } catch (error) {
-    req.logger.error("Error al crear el producto:", error.message);
-    res.status(500).send("Error interno del servidor: " + error.message);
+    // Manejar el error y lanzarlo nuevamente para que se maneje en la ruta
+    throw error;
   }
 };
+
+
+
+
 
 export const getProductById = async (req, res) => {
   const productId = req.params.pid;

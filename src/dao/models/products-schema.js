@@ -30,7 +30,6 @@ const productsModel = mongoose.model(productsCollection, productSchema);
 export default productsModel;
 
 
-
 // import mongoose from "mongoose";
 // import mongoosePaginate from "mongoose-paginate-v2";
 
@@ -50,6 +49,10 @@ export default productsModel;
 //     thumbnails: {
 //         type: [String],
 //         default: []
+//     },
+//     owner: {
+//         type: mongoose.Schema.Types.ObjectId, // Tipo ObjectId para hacer referencia al ID del usuario
+//         ref: 'users' // Referencia al modelo de usuarios
 //     }
 // });
 
@@ -57,3 +60,4 @@ export default productsModel;
 // const productsModel = mongoose.model(productsCollection, productSchema);
 
 // export default productsModel;
+

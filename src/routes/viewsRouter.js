@@ -25,7 +25,6 @@ viewsRoutes.get("/", async (req, res) => {
   return res.render('home',{})
 
 })
-
 viewsRoutes.get('/login', (req, res) => {
   if(req.session?.user) {
       return res.redirect('/profile')
@@ -178,7 +177,6 @@ viewsRoutes.get("/chat", async (req, res) => {
 //     res.status(500).json({ status: 'error', message: error.message });
 //   }
 // });
-
 
 
 /////////////////////////////////////////////////////////////////////////
