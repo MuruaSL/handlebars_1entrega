@@ -47,7 +47,7 @@ export const createCart = async (cartData) => {
 //   }
 // };
 
-export const addToCart = async (cartId, productId, productData) => {
+export const addToCart = async (cartId, productId, productData,userId) => {
   try {
     const quantity = productData.cantidad;
     // Encuentra el carrito por su ID

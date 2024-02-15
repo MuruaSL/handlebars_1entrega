@@ -1,6 +1,8 @@
 // cartService.js
-
+import UserModel from "../models/user-schema.js"
+import ProductsModel from "../models/products-schema.js"
 import CartModel from "../models/cart-schema.js";
+import { logger } from "../../logger.js";
 
 class CartService {
   async createCart(cartData) {
@@ -13,10 +15,10 @@ class CartService {
     }
   }
 
-  async addToCart(cartId, productId, productData, userId) {
+  async addToCart(cid, pid, productData,userId) {
     try {
       const quantity = productData.cantidad;
-      const cart = await CartModel.findById(cartId);
+      const cart = await CartModel.findById(cid);
   
       if (!cart) {
         throw new Error('Carrito no encontrado');
@@ -26,17 +28,19 @@ class CartService {
         cart.productos = [];
       }
   
-      const existingProduct = cart.productos.find((product) => product && product.producto && product.producto.toString() === productId);
+      const existingProduct = cart.productos.find((product) => product && product.producto && product.producto === pid);
   
       // Verificar si el usuario es premium
       const user = await UserModel.findById(userId);
       if (user.role === 'premium') {
         // Obtener el producto que se está intentando agregar al carrito
-        const product = await ProductsModel.findById(productId);
+        const product = await ProductsModel.findById(pid);
   
         // Verificar si el producto le pertenece al usuario premium
         if (product.owner.toString() === userId) {
-          throw new Error('No puedes agregar tu propio producto al carrito');
+
+          logger.fatal('No puedes agregar tu propio producto al carrito');
+          throw new Error("No puedes agregar tu propio producto al carrito");
         }
       }
   
@@ -53,7 +57,7 @@ class CartService {
       const updatedCart = await cart.save();
       return updatedCart;
     } catch (error) {
-      throw new Error('Error al agregar producto al carrito: ' + error.message);
+      throw  Error(error.message);
     }
   }
 

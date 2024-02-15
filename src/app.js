@@ -15,6 +15,7 @@ import productRouter from "./routes/api_productRouter.js";
 import cartRouter from "./routes/api_cartRouter.js";
 import viewsRouter from "./routes/viewsRouter.js";
 import sessionRouter from "./routes/session.router.js";
+import usersRouter from "./routes/api_usersRouter.js"
 //Managers
 
 import * as productConstroller from "./dao/controllers/productController.js"
@@ -83,6 +84,7 @@ app.get('/health', (req, res) => res.send('OK'))
 app.use("/api/cart", cartRouter);
 app.use("/api/products", productRouter);
 app.use('/api/session', sessionRouter)
+app.use('/api/users', usersRouter)
 
 const server = http.createServer(app);
 const io = new SocketIOServer(server);
@@ -101,37 +103,39 @@ io.on("connection", (socket) => {
     productConstroller.addProduct(producto)
   });
 
-  // en /products boton de agregar al carrito
-  //accion addtocart de products y productsDetails.hanlebars mediante products.js
-  socket.on('addToCart', async (productId ) => {
-    try {
-        // Obtener el carrito existente o crear uno nuevo
-        const cart = await cartController.getOneCart();
-        let cid = cart._id
-        if (cart) {
-            // Verificar si el producto ya está en el carrito
-            const existingProduct = cart.productos && Array.isArray(cart.productos) && cart.productos.find((product) => product && product.producto && product.producto.toString() === productId);
-            if (existingProduct) {
-                // Si el producto ya existe, actualiza la cantidad en lugar de agregar un nuevo elemento
-                existingProduct.cantidad += 1;
-                // Utiliza la función updateCartItem para actualizar la cantidad del producto en el carrito
-                await cartController.updateCartQuantity(cid,existingProduct);
-                console.log('Producto en el carrito. Cantidad actualizada');
-            } else {
-                // Si el producto no existe en el carrito, llama a la función addToCart del CartManager
-                await cartController.addToCart(cid, productId, { cantidad: 1 });
-                console.log('Producto agregado al carrito. Carrito actualizado');
-            }
-        } else {
-            // Puedes manejar la lógica aquí si el carrito no se encuentra
-            console.error('Carrito no encontrado');
-            socket.emit('addToCartError', { error: 'Carrito no encontrado' });
+ // en /products boton de agregar al carrito
+
+// Acción addtocart de products y productsDetails.hanlebars mediante products.js
+socket.on('addToCart', async ({ productId, userId }) => {
+  console.log("en el socket? : producto: " + productId, " Iduser: " + userId);
+  try {
+      // Obtener el carrito existente o crear uno nuevo
+      const cart = await cartController.getOneCart();
+      let cid = cart._id
+      if (cart) {
+          // Verificar si el producto ya está en el carrito
+          const existingProduct = cart.productos && Array.isArray(cart.productos) && cart.productos.find((product) => product && product.producto && product.producto.toString() === productId);
+          if (existingProduct) {
+              // Si el producto ya existe, actualiza la cantidad en lugar de agregar un nuevo elemento
+              existingProduct.cantidad += 1;
+              // Utilizar la función updateCartItem para actualizar la cantidad del producto en el carrito
+              await cartController.updateCartQuantity(cid, existingProduct);
+              console.log('Producto en el carrito. Cantidad actualizada');
+          } else {
+              // Si el producto no existe en el carrito, llama a la función addToCart del CartManager
+              await cartController.addToCart(cid, productId, { cantidad: 1 }, userId);
+              console.log('Producto agregado al carrito. Carrito actualizado');
           }
-    } catch (error) {
-        console.error('Error al agregar producto al carrito:', error);
-        // Puedes emitir un evento de error si es necesario
-        socket.emit('addToCartError', { error: 'Error al agregar producto al carrito' });
-    }
+      } else {
+          // Lógica si el carrito no se encuentra
+          console.error('Carrito no encontrado');
+          socket.emit('addToCartError', { error: 'Carrito no encontrado' });
+      }
+  } catch (error) {
+      console.error('Error al agregar producto al carrito:', error);
+      // Puedes emitir un evento de error si es necesario
+      socket.emit('addToCartError', { error: 'Error al agregar producto al carrito' });
+  }
 });
 
 

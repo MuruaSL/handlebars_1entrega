@@ -44,4 +44,15 @@ sessionrouter.post('/logout', (req, res) => {
     });
 });
 
+sessionrouter.get('/', (req, res) => {
+    // Verifica si hay un usuario en la sesión
+    const user = req.session.user;
+    if (user) {
+        // Si hay un usuario en la sesión, devuelve la información de usuario
+        res.json({ userId: user._id, email: user.email, role: user.role });
+    } else {
+        // Si no hay un usuario en la sesión, devuelve un mensaje indicando que no hay sesión activa
+        res.status(404).json({ message: 'No hay sesión activa' });
+    }
+});
 export default sessionrouter

@@ -66,18 +66,14 @@ export const createProduct = async (bodyProduct, sessionUserId) => {
 
 
 
-export const getProductById = async (req, res) => {
-  const productId = req.params.pid;
+export const getProductById = async (productId) => {
   try {
+    logger.info("productID buscado: " + productId);
     const product = await productService.getProductById(productId);
-    if (!product) {
-      req.logger.error("Producto no encontrado.");
-      return res.status(404).send("Producto no encontrado");
-    }
-    return res.json(product);
+    return product; // Devuelve el producto encontrado o null si no se encuentra
   } catch (error) {
-    req.logger.error("Error al obtener el producto:", error.message);
-    return res.status(500).send("Error interno del servidor: " + error.message);
+    logger.error("Error al obtener el producto por ID: ", error);
+    throw new Error("Error al obtener el producto por ID: " + error.message);
   }
 };
 

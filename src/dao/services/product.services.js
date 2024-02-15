@@ -1,5 +1,5 @@
 import productsModel from "../models/products-schema.js";
-
+import { logger } from "../../logger.js";
 class ProductService {
     async getAll() {
         try {
@@ -38,6 +38,7 @@ async create(data) {
 
 async getProductById(productId) {
     try {
+        logger.debug("productID buscado en service : "+productId)
     const product = await productsModel.findById(productId).exec();
     if (product) {
         return product;

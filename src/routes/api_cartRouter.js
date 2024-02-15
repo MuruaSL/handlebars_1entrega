@@ -10,7 +10,8 @@ import {
   deleteCartItem,
 } from '../dao/managers/mongoose.cartManager.js';
 import CartModel from '../dao/models/cart-schema.js';
-
+import * as cartController from"../dao/controllers/cartController.js"
+import { isAuthenticated } from '../dao/modules/authUserModule.js';
 const cartRouter = express.Router();
 
 // Rutas para carts
@@ -143,11 +144,13 @@ cartRouter.delete('/:cid/products/:pid', async (req, res) => {
 /////////////////////////////////////////////////////
 
 //// esta funcion agrega los productos a un carrito pasado por parametro  :cid 
-cartRouter.post('/:cid/product/:pid', async (req, res) => {
+cartRouter.post('/:cid/product/:pid',isAuthenticated, async (req, res) => {
   try {
-    const { cid, pid } = req.params;
+    const { cid, pid } = req.params; // cid y pid obtenidos de la url
     const productData = req.body; // Datos del producto a agregar
-    const updatedCart = await addToCart(cid, pid, productData);
+    const userId = req.user._id; // el id del usuario que agrega al carrito
+    console.log("aqui> " + userId)
+    const updatedCart = await cartController.addToCart(cid, pid, productData,userId);
     res.json({ status: 'success', message: 'Producto agregado al carrito correctamente', cart: updatedCart });
   } catch (error) {
     res.status(500).json({ status: 'error', message: error.message });

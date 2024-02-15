@@ -33,21 +33,21 @@ export const getOneCart = async (req, res) => {
 };
 
 // Agrega un producto al carrito
-export const addToCart = async (cid, productId, cantidad) => {
+export const addToCart = async (cid, pid, productData, userId) => {
   try {
-    await cartService.addToCart(cid, productId, cantidad);
+    return await cartService.addToCart(cid, pid, productData, userId); // retornar resultado de cartService.addToCart
   } catch (error) {
-
-    req.logger.error("error> " + error);
+    throw error; // Lanza el error nuevamente para que pueda ser manejado por el controlador
   }
 };
+
 
 export const updateCartQuantity = async (cid,existingProduct) => {
   try {
     await cartService.updateCartQuantity(cid, existingProduct);
     await cartService.updatedCartTotal(cid)
   } catch (error) {
-    req.logger.error(error +  "Error al actualizar el carrito");
+    console.log("error> "+ error.message);
   }
 };
 

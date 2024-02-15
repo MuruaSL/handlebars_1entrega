@@ -6,7 +6,6 @@ import * as chatController from "../dao/controllers/chatController.js"
 import { requestPasswordReset } from '../dao/controllers/authController.js';
 import { resetPassword } from '../dao/controllers/authController.js';
 
-
 const viewsRoutes = express.Router();
 
 
@@ -238,10 +237,13 @@ viewsRoutes.get('/products/:productId', async (req, res) => {
   }
 });
 
-// renderizado de los productos en /products , aqui tambien se hace la gestion de filtrado por params mediante el controller
 viewsRoutes.get("/products", async (req, res) => {
+  if (!req.session?.user) {
+    return res.redirect('/login')
+  }
   try {
     const products = await productController.getAllProducts(req, res);
+    const user = req.session.user; // Obtener la información del usuario de la sesión
 
     if (!products || !Array.isArray(products)) {
       // Si products es undefined o no es un array, devuelve un error
@@ -250,12 +252,30 @@ viewsRoutes.get("/products", async (req, res) => {
 
     // const productData = products.map(product => product.toObject());
     req.logger.info("Los productos se cargaron correctamente.");
-    res.render("products", {products});
+    res.render('products', { user, products: products });
   } catch (error) {
-    req.logger.error("Error al obtener los productos:", error);
     res.status(500).send("Error interno del servidor: " + error.message);
   }
 });
+
+// // renderizado de los productos en /products , aqui tambien se hace la gestion de filtrado por params mediante el controller
+// viewsRoutes.get("/products", async (req, res) => {
+//   try {
+//     const products = await productController.getAllProducts(req, res);
+
+//     if (!products || !Array.isArray(products)) {
+//       // Si products es undefined o no es un array, devuelve un error
+//       throw new Error("Los productos no se han obtenido correctamente.");
+//     }
+
+//     // const productData = products.map(product => product.toObject());
+//     req.logger.info("Los productos se cargaron correctamente.");
+//     res.render("products", {products});
+//   } catch (error) {
+//     req.logger.error("Error al obtener los productos:", error);
+//     res.status(500).send("Error interno del servidor: " + error.message);
+//   }
+// });
 
 
 

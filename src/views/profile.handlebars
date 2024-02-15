@@ -6,4 +6,8 @@ Age: {{age}} <br>
 Email: {{email}} <br>
 Role: {{role}}
 <br><br>
-<a href="/api/session/logout">Log out</a>
+<form id="logoutForm" action="/api/session/logout" method="POST">
+    <button type="submit">Log out</button>
+</form>
+
+<script src="/js/logout.js"></script>

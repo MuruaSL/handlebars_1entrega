@@ -1,4 +1,4 @@
-<h1>Lista de Productos</h1>
+{{!-- <h1>Lista de Productos</h1>
 <h2>Bienvenido/a {{user.first_name}} {{user.last_name}}</h2>
 <ul id="productList">
   {{#each products}}
@@ -23,4 +23,41 @@
 </ul>
 
 <script src="/socket.io/socket.io.js"></script>
-<script src="/js/products.js"></script>
+<script src="/js/products.js"></script> --}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Productos</title>
+</head>
+<body data-userid="{{user._id}}">
+    <h1>Lista de Productos</h1>
+    <h2>Bienvenido/a {{user.first_name}} {{user.last_name}}</h2>
+    <ul id="productList">
+      {{#each products}}
+        <form class="product-id" data-id="{{this._id}}" id="addProductToCart_{{this._id}}">
+          <li>
+            <h2>{{this.title}}</h2>
+            <p>{{this.description}}</p>
+            <p>Precio: {{this.price}}</p>
+            <p>Código: {{this.code}}</p>
+            <p>Stock: {{this.stock}}</p>
+            <p>Status: {{this.status}}</p>
+            <p>Categoría: {{this.category}}</p>
+
+            <!-- Botón para ver detalles del producto -->
+            <a href="/products/{{this._id}}">Ver Detalles</a>
+
+            <!-- Botón para agregar al carrito directamente -->
+            <button type="submit">Agregar al Carrito</button>
+          </li>
+        </form>
+      {{/each}}
+    </ul>
+
+    <!-- Incluir el cliente de Socket.IO -->
+    <script src="/socket.io/socket.io.js"></script>
+    <!-- Incluir el script de manejo de productos -->
+    <script src="/js/products.js"></script>
+</body>
+</html>
