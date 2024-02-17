@@ -22,13 +22,19 @@ import * as productConstroller from "./dao/controllers/productController.js"
 import * as cartController from "./dao/controllers/cartController.js"
 import * as chatController from "./dao/controllers/chatController.js"
 
+//documentacion
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUiExpress from "swagger-ui-express"
+
 //logger
 import {addLogger, logger} from './logger.js' // Importar el logger y la función addLogger
 // Obtener la configuración del entorno
 import config from "./config/config.js";
 import dotenv from 'dotenv';
-
 dotenv.config();
+
+
+
 //inicializacion de servidor // variables mongo
 
 const mongoUrl = config.mongoUrl;
@@ -38,6 +44,20 @@ const port = config.port || 8080;
 
 //aplicar el logger
 app.use(addLogger)
+
+//inicializacion de documentacion 
+const swaggerOptions = {
+  definition:{
+    openapi:"3.0.1",
+    info:{
+      title:"Documentacion del ecommerse",
+      description:'Este proyecto es un trabajo integrador del curso de backend 2023-2024'
+    }
+  },
+  apis:[`${__dirname}/docs/**/*.yaml`]
+}
+const specs = swaggerJSDoc(swaggerOptions)
+app.use('/apidocs',swaggerUiExpress.serve,swaggerUiExpress.setup(specs))
 
 // Configuracion Sessions
 app.use(session({

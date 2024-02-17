@@ -1,0 +1,68 @@
+paths:
+  /api/products:
+    get:
+      summary: Obtiene todos los productos
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Los productos se recuperan correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        "500":
+          description: Error interno del servidor
+    post:
+      summary: Crear un producto
+      tags:
+        - Products
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Id generado por mongo
+        id:
+          type: integer
+          description: Un id interno de productos
+        title:
+          type: string
+          description: El nombre del producto
+        description:
+          type: string
+          description: La descripcion detallada del producto
+        price:
+          type: number
+          description: Precio del producto
+        code:
+          type: string
+          description: Alfanumerico que es unico entre los productos (_id tambien es unico)
+        stock:
+          type: integer
+          description: Cantidad de este producto disponible
+        status:
+          type: boolean
+          description: Un true o un false, esto activa o desactiva el producto a la hora de leerlo en /products
+        thumbnails:
+          type: array
+          description: Array que contiene las direcciones o enlaces a imagenes de productos
+          items:
+            type: string
+      example:
+        - _id: "6536fc8b5b2c03cff998076b"
+          id: 12
+          title: "Monitor LG UltraGear 27GL83A-B"
+          description: "Un monitor de juego de alta velocidad con resolución QHD y tecnología de sincronización G-Sync."
+          price: 349.99
+          code: "LG27GL83A"
+          stock: 90
+          status: true
+          thumbnails: 
+            - "lg_ultragear_1.jpg"
+            - "lg_ultragear_2.jpg"
