@@ -1,0 +1,180 @@
+paths:
+  /api/cart:
+    post:
+      summary: 'Crear un carrito'
+      tags:
+        - Carts
+      parameters:
+        - in: 'body'
+          name: 'cartData'
+          description: 'Datos del carrito a crear'
+          required: true
+          schema:
+            $ref: '#/components/schemas/CartData'
+      responses:
+        201:
+          description: 'Carrito creado correctamente'
+          schema:
+            $ref: '#/components/schemas/Cart'
+        500:
+          description: 'Error del servidor'
+  '/api/cart/{id}':
+    get:
+      summary: 'Obtener un carrito por ID'
+      tags:
+        - Carts
+      parameters:
+        - in: 'path'
+          name: 'id'
+          description: 'ID del carrito'
+          required: true
+          type: 'string'
+      responses:
+        200:
+          description: 'Carrito obtenido correctamente'
+          schema:
+            $ref: '#/components/schemas/Cart'
+        404:
+          description: 'Carrito no encontrado'
+        500:
+          description: 'Error del servidor'
+    put:
+      summary: 'Actualizar un carrito por ID'
+      tags:
+        - Carts
+      parameters:
+        - in: 'path'
+          name: 'id'
+          description: 'ID del carrito'
+          required: true
+          type: 'string'
+        - in: 'body'
+          name: 'updatedData'
+          description: 'Datos actualizados del carrito'
+          required: true
+          schema:
+            $ref: '#/components/schemas/CartData'
+      responses:
+        200:
+          description: 'Carrito actualizado correctamente'
+          schema:
+            $ref: '#/components/schemas/Cart'
+        500:
+          description: 'Error del servidor'
+    delete:
+      summary: 'Eliminar un carrito por ID'
+      tags:
+        - Carts
+      parameters:
+        - in: 'path'
+          name: 'id'
+          description: 'ID del carrito'
+          required: true
+          type: 'string'
+      responses:
+        200:
+          description: 'Carrito eliminado correctamente'
+        404:
+          description: 'Carrito no encontrado'
+        500:
+          description: 'Error del servidor'
+  '/api/cart/{cid}/products/{pid}':
+    put:
+      summary: 'Actualizar la cantidad de un producto en un carrito'
+      tags:
+        - Carts
+      parameters:
+        - in: 'path'
+          name: 'cid'
+          description: 'ID del carrito'
+          required: true
+          type: 'string'
+        - in: 'path'
+          name: 'pid'
+          description: 'ID del producto'
+          required: true
+          type: 'string'
+        - in: 'body'
+          name: 'cantidad'
+          description: 'Nueva cantidad del producto'
+          required: true
+          schema:
+            type: 'object'
+            properties:
+              cantidad:
+                type: 'number'
+      responses:
+        200:
+          description: 'Producto en el carrito actualizado correctamente'
+          schema:
+            $ref: '#/components/schemas/Cart'
+        500:
+          description: 'Error del servidor'
+    delete:
+      summary: 'Eliminar un producto de un carrito'
+      tags:
+        - Carts
+      parameters:
+        - in: 'path'
+          name: 'cid'
+          description: 'ID del carrito'
+          required: true
+          type: 'string'
+        - in: 'path'
+          name: 'pid'
+          description: 'ID del producto'
+          required: true
+          type: 'string'
+      responses:
+        200:
+          description: 'Producto eliminado del carrito correctamente'
+        404:
+          description: 'Producto o carrito no encontrado'
+        500:
+          description: 'Error del servidor'
+
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Id generado por mongo
+        id:
+          type: string
+          description: Un id interno de cart
+        products:
+          type: array
+          description: Array que contiene los productos del carrito
+          items:
+            type: string
+      example:
+        - _id: "654a4af5ad41cf513905768e"
+          id: "cart1"
+          products: 
+            - "654a4af5ad41cf513905768e"
+            - cantidad:24
+            - "6536fc8b5b2c03cff9980764"
+            - cantidad:24
+
+    CartData:
+      type: 'object'
+      properties:
+        id:
+          type: 'ObjetId'
+        productos:
+          type: 'array'
+          items:
+            $ref: '#/components/schemas/ProductData'
+        total:
+          type: 'number'
+    ProductData:
+      type: 'object'
+      properties:
+        producto:
+          type: 'string'
+        cantidad:
+          type: 'number'
+
+
