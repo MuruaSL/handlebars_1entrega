@@ -50,6 +50,7 @@ sessionrouter.get('/', (req, res) => {
     if (user) {
         // Si hay un usuario en la sesión, devuelve la información de usuario
         res.json({ userId: user._id, email: user.email, role: user.role });
+        return res.status(200)
     } else {
         // Si no hay un usuario en la sesión, devuelve un mensaje indicando que no hay sesión activa
         res.status(404).json({ message: 'No hay sesión activa' });

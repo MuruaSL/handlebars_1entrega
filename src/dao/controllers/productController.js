@@ -70,12 +70,14 @@ export const getProductById = async (productId) => {
   try {
     logger.info("productID buscado: " + productId);
     const product = await productService.getProductById(productId);
-    return product; // Devuelve el producto encontrado o null si no se encuentra
+    return product;
   } catch (error) {
-    logger.error("Error al obtener el producto por ID: ", error);
-    throw new Error("Error al obtener el producto por ID: " + error.message);
+    // Loguea solo el mensaje de error en lugar del objeto completo de error
+    logger.error("Error al obtener el producto por ID: " + error.message);
+    throw new Error("Error al obtener el producto por ID");
   }
 };
+
 
 export const updateProduct = async (req, res) => {
   const productId = req.params.pid;
@@ -108,6 +110,16 @@ export const deleteProduct = async (req, res) => {
     }
   } catch (error) {
     req.logger.error("Hubo un problema al eliminar el producto:", error.message);
+    res.status(500).send("Error interno del servidor: " + error.message);
+  }
+};
+export const getProductByCode = async (req, res) => {
+  const productCode = req.params.code;
+  try {
+    const productId = await productService.getProductIdByCode(productCode);
+    res.json({ productId });
+  } catch (error) {
+    logger.error("Error al obtener el ID del producto por código:", error.message);
     res.status(500).send("Error interno del servidor: " + error.message);
   }
 };

@@ -4,13 +4,14 @@
   "main": "app.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha src/test/super.test.js",
     "start": "nodemon src/app.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@faker-js/faker": "^8.4.1",
     "bcrypt": "^5.1.1",
     "connect-mongo": "^5.1.0",
     "dotenv": "^16.3.1",
@@ -29,5 +30,10 @@
     "swagger-ui-express": "^5.0.0",
     "winston": "^3.11.0"
   },
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "chai": "^5.1.0",
+    "mocha": "^10.3.0",
+    "supertest": "^6.3.4"
+  }
 }

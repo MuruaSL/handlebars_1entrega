@@ -116,6 +116,19 @@ async filteredGetProducts({ page, limit, sort, queryField }) {
     }
 }
 
+async getProductIdByCode(productCode) {
+    try {
+        const product = await productsModel.findOne({ code: productCode }).exec();
+        if (product) {
+            return product._id;
+        } else {
+            throw new Error("Producto no encontrado");
+        }
+    } catch (error) {
+        throw new Error("Error al obtener el ID del producto por código: " + error.message);
+    }
+}
+
 }
 
 
