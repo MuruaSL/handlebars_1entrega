@@ -13,24 +13,28 @@ export const createCart = (req, res) => {
     res.status(500).json({ error: "Error al crear el carrito" });
   }
 };
-// Obtiene un carrito por su ID
+// Controlador para obtener un carrito por su ID
 export const getCartById = async (cid) => {
-  try{
-    return await cartService.getCartById(cid);
-    }catch(error){
-    req.logger.error("No se encontro el carrito")
-    res.status(404).json({ error: "Carrito no encontrado"})
+  try {
+    const cart = await cartService.getCartById(cid);
+    return cart;
+  } catch (error) {
+    // Manejar el error de alguna manera
+    throw new Error("No se pudo obtener el carrito: " + error.message);
   }
 };
-export const getOneCart = async (req, res) => {
+
+// Controlador para obtener un carrito único
+export const getOneCart = async () => {
   try {
     const cart = await cartService.getOneCart();
     return cart;
   } catch (error) {
-    req.logger.error("No se encontro el carrito")
-    res.status(404).json({ error: "Carrito no encontrado" });
+    // Manejar el error de alguna manera
+    throw new Error("No se pudo obtener el carrito: " + error.message);
   }
 };
+
 
 // Agrega un producto al carrito
 export const addToCart = async (cid, pid, productData, userId) => {

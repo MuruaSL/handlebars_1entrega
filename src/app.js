@@ -8,15 +8,16 @@ import MongoStore from 'connect-mongo'
 import session from "express-session";
 import passport from "passport";
 import initializePassport from "./config/passport.config.js";
-
+import cors from "cors"
 
 // Routes
 import productRouter from "./routes/api_productRouter.js";
-import cartRouter from "./routes/api_cartRouter.js";
+import apicartRouter from "./routes/api_cartRouter.js";
 import viewsRouter from "./routes/viewsRouter.js";
 import sessionRouter from "./routes/session.router.js";
-import usersRouter from "./routes/api_usersRouter.js"
-//Managers
+import usersRouter from "./routes/api_usersRouter.js";
+import cartRouter from "./routes/cartRouter.js"
+import paymentsRouter from './routes/paymentsRouter.js';
 
 import * as productConstroller from "./dao/controllers/productController.js"
 import * as cartController from "./dao/controllers/cartController.js"
@@ -45,6 +46,9 @@ const port = config.port || 8080;
 //aplicar el logger
 app.use(addLogger)
 
+// aplicar cors para no tener problemas de web
+
+app.use(cors());
 //inicializacion de documentacion 
 const swaggerOptions = {
   definition:{
@@ -101,10 +105,12 @@ logger.transports[0].level = logLevel; // Setear el nivel de registro para la co
 //////////////////////
 app.use("/", viewsRouter);
 app.get('/health', (req, res) => res.send('OK'))
-app.use("/api/cart", cartRouter);
+app.use("/api/cart", apicartRouter);
 app.use("/api/products", productRouter);
 app.use('/api/session', sessionRouter)
 app.use('/api/users', usersRouter)
+app.use('/create_preference',paymentsRouter)
+app.use('/cart',cartRouter)
 
 const server = http.createServer(app);
 const io = new SocketIOServer(server);

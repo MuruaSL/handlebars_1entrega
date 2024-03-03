@@ -1,38 +1,40 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <title>Carrito de Compras</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {{!-- // SDK MercadoPago.js --}}
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+    <title>Tu carrito de Compras</title>
+    <link rel="stylesheet" href="/styles/cart.css">
 </head>
 <body>
-    <h1>Carrito de Compras</h1>
-    {{! <ul> }}
-    <div>
-        <table style="width: 100%;">
-            {{#each products}}
-                <tr>
-                    <th>Producto:</th>
-                    <th>Precio: $</th>
-                    <th>Categoría</th>
-                    <th>Descripción</th>
-                    <th>Cantidad</th>
-                </tr>
-                <tr>
-                    <td style="text-align: center">{{this.title}}</td>
-                    <td style="text-align: center">{{this.price}}</td>
-                    <td style="text-align: center">{{this.category}}</td>
-                    <td style="text-align: center">{{this.description}}</td>
-                    <td style="text-align: center">{{this.cantidad}}</td>
-                </tr>
-            {{/each}}
-        </table>
+    <div class="cart-summary">
+        <h1>Carrito de Compras</h1>
+        <div class="cart-total">
+            <p>Total del Carrito: $<span id="total">{{total}}</span></p>
+            <button class="btn-buy" id="checkout-btn">Ir al checkout</button>
+        </div>
+        <div id="wallet_container"></div>
+    </div>
+    <div class="cart-container">
+        {{#each products}}
+        <div class="card">
+            <img src="{{this.producto.image}}" alt="{{this.producto.title}}">
+            <div class="card-details">
+                <h2 id="product-description">{{this.producto.title}}</h2>
+                <p id="unit-price">Precio: ${{this.producto.price}}</p>
+                <p id="quantity">Cantidad: {{this.cantidad}}</p>
+                <p>Subtotal: ${{this.subtotal}}</p>
+            </div>
+        </div>
+        {{/each}}
     </div>
 
-    <br />
     
-    <div>
-        <a href="/products">Volver a la página de productos</a>
-    </div>
     
+    {{!-- script de mercado pago para hacer el cheout --}}
+    <script src="/js/mercado_pago.js" type="module"></script>
 
 </body>
 </html>

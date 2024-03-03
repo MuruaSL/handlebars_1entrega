@@ -1,0 +1,56 @@
+/* Estilos para la tarjeta */
+.card {
+    display: flex;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para la imagen */
+.card img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+}
+
+/* Estilos para los detalles */
+.card-details {
+    padding: 20px;
+}
+
+/* Estilos generales */
+.cart-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* Estilos para el resumen del carrito */
+.cart-summary {
+    background-color: #f0f0f0;
+    padding: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.cart-total {
+    margin-top: 10px;
+}
+
+.btn-buy {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-buy:hover {
+    background-color: #0056b3;
+}

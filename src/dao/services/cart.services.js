@@ -71,7 +71,7 @@ class CartService {
 
   async getOneCart() {
     try {
-      const cart = await CartModel.findOne({/* Filtro para encontrar el carrito */ });
+      const cart = await CartModel.findOne({}).sort({ createdAt: 1 });
       return cart;
     } catch (error) {
       throw new Error("Error al obtener el carrito: " + error.message);
