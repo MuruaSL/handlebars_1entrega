@@ -1,0 +1,54 @@
+
+body {
+    font-family: 'Overpass', sans-serif;
+    font-weight: normal;
+    font-size: 100%;
+    color: #f8f9fa; /* Color de texto similar al del formulario de login */
+    margin: 0;
+    background-color: #343a40; /* Color de fondo similar al del formulario de login */
+}
+
+.footer {
+    color: #ffffff; 
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #000000; 
+    text-align: center;
+}
+
+.footer-content p {
+    color: #ffffff; 
+    margin: 0; /* Eliminar el margen para evitar espacios innecesarios */
+}
+
+.footer-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+/* Barra de Navegación */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #343a40; /* Color de fondo similar al del formulario de login */
+    
+}
+
+.navbar a {
+    text-decoration: none;
+    color: #f8f9fa; /* Color de texto similar al del formulario de login */
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+.navbar a:hover {
+    background-color: #495057; /* Color de fondo similar al del botón de login al pasar el mouse */
+}
+.navbar img {
+    max-height: 30px; /* Limita la altura máxima del botón */
+    width: auto; /* Permite que la anchura se ajuste automáticamente para mantener la proporción de la imagen */
+}

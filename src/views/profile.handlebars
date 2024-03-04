@@ -1,13 +1,25 @@
-<h1>Profile</h1>
-
-First Name: {{first_name}} <br>
-Last Name: {{last_name}} <br>
-Age: {{age}} <br>
-Email: {{email}} <br>
-Role: {{role}}
-<br><br>
-<form id="logoutForm" action="/api/session/logout" method="POST">
-    <button type="submit">Log out</button>
-</form>
-
-<script src="/js/logout.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="/styles/profile.css">
+</head>
+<body>
+    <div class="card">
+        <h1>Profile</h1>
+        <div class="info">
+            <p><span>First Name:</span> <span>{{first_name}}</span></p>
+            <p><span>Last Name:</span> <span>{{last_name}}</span></p>
+            <p><span>Age:</span> <span>{{age}}</span></p>
+            <p><span>Email:</span> <span>{{email}}</span></p>
+            <p><span>Role:</span> <span>{{role}}</span></p>
+        </div>
+        <form id="logoutForm" action="/api/session/logout" method="POST">
+            <button type="submit">Log out</button>
+        </form>
+        <script src="/js/logout.js"></script>
+    </div>
+</body>
+</html>

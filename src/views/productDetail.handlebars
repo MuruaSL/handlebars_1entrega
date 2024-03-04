@@ -5,10 +5,12 @@
     
     <title>Detalles del Producto</title>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" href="/styles/productDetail.css"> 
 </head>
 <body data-userid="{{user._id}}">
-    <h1>Detalles del Producto</h1>
-    <form class="product-id" data-id="{{product._id}}" id="addProductToCart">    
+    <h1 class="tituloDetalleProd">Detalles del Producto</h1>
+    <form class="product-id" data-id="{{product._id}}" id="addProductToCart">  
+        <img src="{{product.thumbnails}}" alt="Imagen del producto" class="product-image">
         <h1>{{product.title}}</h1>
         <p>{{product.description}}</p>
         <p>Precio: {{product.price}}</p>

@@ -1,0 +1,57 @@
+body {
+    background-image: url(../img/fondo_difuminado_login.jpg);
+}
+.tituloDetalleProd{
+    color: white;
+}
+
+/* Estilos específicos para los detalles del producto */
+.product-id {
+    width: 70%; /* Ancho del formulario de detalles del producto */
+    margin: 0 auto; /* Centrar el formulario en la página */
+    padding: 20px; /* Espaciado interno */
+    background-color: #f8f9fa; /* Color de fondo suave */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    display: grid; /* Utiliza el sistema de grid */
+    grid-template-columns: auto 1fr; /* Primera columna para la imagen y segunda columna para el contenido */
+    grid-template-rows: auto auto auto; /* Tres filas para acomodar los elementos */
+    gap: 20px; /* Espaciado entre las celdas del grid */
+    margin-bottom: 50px; /* Margen inferior */
+}
+
+
+.product-image {
+    grid-column: 1; /* La imagen ocupa la primera columna */
+    grid-row: 1 / span 3; /* La imagen ocupa desde la primera fila hasta tres filas */
+    border-radius: 8px; /* Bordes redondeados */
+    max-width: 80%; /* La imagen no puede exceder el ancho del contenedor */
+}
+
+.product-details {
+    grid-column: 2; /* El contenido ocupa la segunda columna */
+    grid-row: 1 / span 3; /* El contenido ocupa desde la primera fila hasta tres filas */
+}
+
+.product-id h1 {
+    margin-top: 0; /* Elimina el margen superior del título */
+}
+
+.product-id p {
+    margin: 8px 0; /* Espaciado entre párrafos */
+}
+
+.product-id button[type="submit"] {
+    width: 100%; /* Ancho del botón */
+    padding: 10px; /* Espaciado interno del botón */
+    border: none; /* Quita los bordes */
+    border-radius: 4px; /* Bordes redondeados */
+    background-color: #343a40; /* Color de fondo del botón */
+    color: #ffffff; /* Color del texto */
+    text-decoration: none; /* Quita el subrayado del enlace */
+    cursor: pointer; /* Cambia el cursor al pasar por encima */
+}
+
+.product-id button[type="submit"]:hover {
+    background-color: #495057; /* Cambia el color de fondo al pasar el mouse */
+}

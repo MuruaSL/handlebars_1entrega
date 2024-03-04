@@ -1,0 +1,61 @@
+body{
+    background-image: url('../img/fondo_difuminado_login.jpg');
+}
+.titleCss{
+    color: white;
+}
+.welcomemessage{
+    color: tomato;
+}
+#productList {
+    list-style-type: none; /* Quita los puntos de la lista */
+    padding: 0;
+    margin: 0;
+    margin-bottom: 60px;
+    display: flex; /* Utiliza flexbox para acomodar los elementos en una fila */
+    flex-wrap: wrap; /* Permite que los elementos se envuelvan a la siguiente línea si no caben en una sola fila */
+    justify-content: space-between; /* Distribuye los elementos de manera uniforme a lo largo del contenedor */
+}
+
+
+.product-id {
+    width: 30vw; /* Define el ancho deseado para las tarjetas */
+    margin: 20px; /* Añade margen para separar las tarjetas */
+    background-color: #f8f9fa; /* Color de fondo suave */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    padding: 20px; /* Espaciado interno */
+}
+
+.product-id h2 {
+    margin-top: 0; /* Elimina el margen superior del título */
+}
+
+.product-id p {
+    margin: 8px 0; /* Espaciado entre párrafos */
+}
+
+.product-id a,
+.product-id button {
+    display: inline-block; /* Muestra los enlaces y botones en línea */
+    padding: 8px 16px; /* Espaciado interno */
+    border: none; /* Quita los bordes */
+    border-radius: 4px; /* Bordes redondeados */
+    background-color: #343a40; /* Color de fondo del botón */
+    color: #ffffff; /* Color del texto */
+    text-decoration: none; /* Quita el subrayado del enlace */
+    cursor: pointer; /* Cambia el cursor al pasar por encima */
+}
+
+.product-id a:hover,
+.product-id button:hover {
+    background-color: #495057; /* Cambia el color de fondo al pasar el mouse */
+}
+
+.product_img{
+    max-width: 80%;
+}
+.productImg_div{
+display: flex;
+justify-content: center;
+}
