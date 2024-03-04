@@ -9,6 +9,19 @@ const client = new MercadoPagoConfig({ accessToken:access_token});
 // Configurar las credenciales de acceso
 const router = new Router()
 
+// auto return de mercado pago urls
+router.get('/success-payment', async (req, res) => {
+    res.render('success-payment');
+    });
+
+router.get('/failure-payment', async (req, res) => {
+    res.render('failure-payment');
+});
+
+router.get('/pending-payment', async (req, res) => {
+    res.render('pending-payment');
+});
+
 router.post('/', async (req, res) => {
     try {
         const { items } = req.body;
@@ -20,9 +33,9 @@ router.post('/', async (req, res) => {
             body: {
                 items: items,
                 back_urls:{
-                    success:"https://i.pinimg.com/736x/e8/de/a9/e8dea964ee60ba898cbeb98bd92659cb.jpg",
-                    failure:"https://thumbs.dreamstime.com/z/tarjeta-de-error-pago-rechazada-fallo-electr%C3%B3nico-problema-transacci%C3%B3n-bancaria-m%C3%B3vil-tarjetas-d%C3%A9bito-cr%C3%A9dito-no-funciona-258548540.jpg",
-                    pending:"https://c8.alamy.com/compes/dm775d/actualmente-se-encuentra-pendiente-de-pago-dm775d.jpg"
+                    success:"https://handlebars1entrega-production.up.railway.app/create_preference/success-payment",
+                    failure:"https://handlebars1entrega-production.up.railway.app/create_preference/failure-payment",
+                    pending:"https://handlebars1entrega-production.up.railway.app/create_preference/pending-payment"
                 },
                 auto_return:"approved",
 
