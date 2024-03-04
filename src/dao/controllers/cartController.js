@@ -46,12 +46,64 @@ export const addToCart = async (cid, pid, productData, userId) => {
 };
 
 
+/**
+ * The function `updateCartQuantity` updates the quantity of an existing product in the cart and then
+ * updates the total cart amount.
+ * @param cid - The `cid` parameter in the `updateCartQuantity` function likely stands for the cart ID,
+ * which is used to identify a specific cart in the system.
+ * @param existingProduct - The `existingProduct` parameter likely refers to the product that is
+ * already in the cart and needs to be updated with a new quantity. This parameter would contain
+ * information such as the product ID, quantity, price, and any other relevant details needed to update
+ * the cart with the new quantity for that specific product
+ */
 export const updateCartQuantity = async (cid,existingProduct) => {
   try {
     await cartService.updateCartQuantity(cid, existingProduct);
     await cartService.updatedCartTotal(cid)
   } catch (error) {
     console.log("error> "+ error.message);
+  }
+};
+
+export const decreaseOneQuantityController = async (cartId, pid, req, res) => {
+  try {
+      // Llama a la función decreaseOneQuantity del servicio
+      const updatedCart = await cartService.decreaseOneQuantity(cartId, pid);
+
+      // Envía una respuesta exitosa
+      res.json({ status: 'success', message: 'Producto en el carrito actualizado correctamente', updatedCart });
+  } catch (error) {
+      // Maneja cualquier error que ocurra durante el proceso
+      console.error("Error al restar una unidad del producto en el carrito:", error);
+      res.status(500).json({ status: 'error', message: 'Error al restar una unidad del producto en el carrito' });
+  }
+  
+};
+
+export const increaseOneQuantityController = async (cartId, pid, req, res) => {
+  try {
+      // Llama a la función increaseOneQuantity del servicio
+      const updatedCart = await cartService.increaseOneQuantity(cartId, pid);
+
+      // Envía una respuesta exitosa
+      res.json({ status: 'success', message: 'Producto en el carrito actualizado correctamente', updatedCart });
+  } catch (error) {
+      // Maneja cualquier error que ocurra durante el proceso
+      console.error("Error al aumentar una unidad del producto en el carrito:", error);
+      res.status(500).json({ status: 'error', message: 'Error al aumentar una unidad del producto en el carrito' });
+  }
+};
+
+
+// Elimina un producto del carrito
+export const deleteCartItem = async (cid, pid) => {
+  try {
+      // Llama al servicio para eliminar el producto del carrito
+      const result = await cartService.deleteCartItem(cid, pid);
+      return result; // Retorna el resultado de la eliminación
+  } catch (error) {
+      console.error('Error al eliminar el producto del carrito:', error);
+      throw new Error('Error interno del servidor al eliminar el producto del carrito');
   }
 };
 

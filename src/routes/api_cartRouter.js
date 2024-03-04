@@ -43,7 +43,7 @@ cartRouter.get('/:cid', async (req, res) => {
       { $unwind: { path: '$productos.producto', preserveNullAndEmptyArrays: true } },
     ]);
 
-    console.log("Cart result:", cart);
+    
 
     // Verifica si 'productos' es un objeto con la propiedad 'producto' y si 'producto' es un array
     if (!cart || cart.length === 0 || !cart[0].productos) {
@@ -113,7 +113,7 @@ cartRouter.delete('/:cid', async (req, res) => {
     res.status(500).json({ status: 'error', message: error.message });
   }
 });
-
+// modificar la cantidad de un articulo en una cantidad especifica enviada por body
 cartRouter.put('/:cid/products/:pid', async (req, res) => {
   try {
     const { cid, pid } = req.params;
@@ -124,6 +124,7 @@ cartRouter.put('/:cid/products/:pid', async (req, res) => {
     res.status(500).json({ status: 'error', message: error.message });
   }
 });
+
 
 cartRouter.delete('/:cid/products/:pid', async (req, res) => {
   try {
@@ -197,7 +198,6 @@ cartRouter.post('/product/:pid', async (req, res) => {
     res.status(500).json({ status: 'error', message: error.message });
   }
 });
-
 
 
 export default cartRouter;

@@ -1,27 +1,11 @@
 const socket = io();
 
-//------------------------------------------------------------------------------//
-//   Funcionalidad de agregar productos al carrito                              //
-//------------------------------------------------------------------------------//
 
+    //------------------------------------------------------------------------------//
+    //   Funcionalidad de agregar productos al carrito                              //
+    //------------------------------------------------------------------------------//
+    
 
-// para products.handlebars
-// document.addEventListener("DOMContentLoaded", () => {
-//     const productForms = document.querySelectorAll(".product-id");
-
-//     productForms.forEach((productForm) => {
-//         productForm.addEventListener("submit", async (event) => {
-//             event.preventDefault();
-
-//             // Obtener el valor del _id del formulario
-//             const productId = event.target.dataset.id;
-//             const userId = session.userId
-//             console.log("USER id> "+userId+" Pid> "+productId )
-//             // Emitir el evento addToCart al servidor
-//             socket.emit('addToCart', productId ,userId);
-//         });
-//     });
-// });
 document.addEventListener("DOMContentLoaded", () => {
     const productForms = document.querySelectorAll(".product-id");
     
@@ -37,7 +21,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Emitir el evento addToCart al servidor, pasando el productId y el userId
             socket.emit('addToCart', { productId, userId });
+                          // Mostrar una notificación
+                        Toastify({
+                        text: "!Producto agregado correctamente al carrito!",
+                        duration: 3000, // Duración en milisegundos
+                        newWindow: true,
+                        close: true,
+                        gravity: "top", // `top` o `bottom`
+                        position: 'right', // `left`, `center` o `right`
+                        backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+                        }).showToast();
         });
     });
 });
-

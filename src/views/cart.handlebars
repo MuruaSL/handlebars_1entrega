@@ -6,35 +6,44 @@
     {{!-- // SDK MercadoPago.js --}}
     <script src="https://sdk.mercadopago.com/js/v2"></script>
     <title>Tu carrito de Compras</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <link rel="stylesheet" href="/styles/cart.css">
 </head>
 <body>
     <div class="cart-summary">
         <h1>Carrito de Compras</h1>
         <div class="cart-total">
-            <p>Total del Carrito: $<span id="total">{{total}}</span></p>
+            <p>Total del Carrito: $<span id="total">0</span></p>
             <button class="btn-buy" id="checkout-btn">Ir al checkout</button>
         </div>
         <div id="wallet_container"></div>
     </div>
-    <div class="cart-container">
-        {{#each products}}
-        <div class="card">
-            <img src="{{this.producto.image}}" alt="{{this.producto.title}}">
-            <div class="card-details">
-                <h2 id="product-description">{{this.producto.title}}</h2>
-                <p id="unit-price">Precio: ${{this.producto.price}}</p>
-                <p id="quantity">Cantidad: {{this.cantidad}}</p>
-                <p>Subtotal: ${{this.subtotal}}</p>
-            </div>
+    <div class="cart-container" data-cart-id="{{cartId}}">
+    {{#each products}}
+    <div class="card">
+        <img src="{{this.producto.image}}" alt="{{this.producto.title}}">
+        <div class="card-details">
+            <h2 id="product-description">{{this.producto.title}}</h2>
+            <p id="unit-price">Precio: ${{this.producto.price}}</p>
+            <p id="quantity" data-product-quantity="{{this.cantidad}}">Cantidad: {{this.cantidad}}</p>
+            <p>Subtotal: ${{this.subtotal}}</p>
+            <button class="btn-remove" data-product-id="{{this._id}}">Eliminar</button>
+            <button class="btn-decrement" data-product-id="{{this._id}}">-</button>
+            <button class="btn-increment" data-product-id="{{this._id}}">+</button> <!-- Botón de aumento -->
         </div>
-        {{/each}}
     </div>
+    {{/each}}
+</div>
+
 
     
     
     {{!-- script de mercado pago para hacer el cheout --}}
     <script src="/js/mercado_pago.js" type="module"></script>
-
+    {{!-- Script de funcionamiento del carrito --}}
+    <script src="/js/cart.js" type="module"></script> <!-- Nuevo archivo para la lógica del carrito -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 </body>
 </html>
