@@ -22,7 +22,7 @@
     <div class="cart-container" data-cart-id="{{cartId}}">
     {{#each products}}
     <div class="card">
-        <img src="{{this.producto.image}}" alt="{{this.producto.title}}">
+        <img src="{{this.producto.thumbnails}}" alt="{{this.producto.title}}">
         <div class="card-details">
             <h2 id="product-description">{{this.producto.title}}</h2>
             <p id="unit-price">Precio: ${{this.producto.price}}</p>

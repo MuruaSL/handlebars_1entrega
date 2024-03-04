@@ -1,56 +1,93 @@
-/* Estilos para la tarjeta */
-.card {
-    display: flex;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-bottom: 20px;
-    overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+body {
+    background-image: url('../img/fondo_difuminado_login.jpg');
 }
 
-/* Estilos para la imagen */
-.card img {
-    width: 200px;
-    height: 200px;
-    object-fit: cover;
+.titleCss {
+    color: white;
 }
 
-/* Estilos para los detalles */
-.card-details {
-    padding: 20px;
+.welcomemessage {
+    color: tomato;
 }
 
-/* Estilos generales */
-.cart-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-    margin-top: 20px;
-}
-
-/* Estilos para el resumen del carrito */
 .cart-summary {
-    background-color: #f0f0f0;
-    padding: 20px;
-    margin-bottom: 20px;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
 }
 
 .cart-total {
-    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+#total {
+    font-weight: bold;
 }
 
 .btn-buy {
+    background-color: #343a40;
+    color: #ffffff;
     padding: 10px 20px;
-    font-size: 16px;
-    background-color: #007bff;
-    color: #fff;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    font-size: 16px;
 }
 
 .btn-buy:hover {
-    background-color: #0056b3;
+    background-color: #495057;
+}
+
+.cart-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 20px;
+    margin-bottom: 50px;
+}
+
+.card {
+    width: 30vw;
+    margin: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.card img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.card-details {
+    text-align: center;
+}
+
+.card-details p {
+    margin: 8px 0;
+}
+
+.btn-remove,
+.btn-decrement,
+.btn-increment {
+    display: inline-block;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    background-color: #343a40;
+    color: #ffffff;
+    text-decoration: none;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.btn-remove:hover,
+.btn-decrement:hover,
+.btn-increment:hover {
+    background-color: #495057;
 }
