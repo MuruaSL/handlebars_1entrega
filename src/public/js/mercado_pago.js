@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });    
             console.log("Datos de la orden enviados al servidor:", orderData); // Agrega este console.log para verificar los datos antes de enviarlos al servidor
 
-            const response = await fetch("http://localhost:8080/create_preference", {
+            const response = await fetch("/create_preference", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
