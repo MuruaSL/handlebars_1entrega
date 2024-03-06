@@ -5,21 +5,35 @@ import { createHash, isValidPassword } from "../utils.js";
 const sessionrouter = Router()
 
 sessionrouter.post('/signup', async (req, res) => {
-    const newUser = req.body;
-    
+    try {
+        const newUser = req.body;
+        
+        // Verifica si el correo electrónico sigue el patrón para el rol de administrador
+        const isAdmin = /.*adminCoder@coder\.com.*/i.test(newUser.email);
 
-    // Verifica si el correo electrónico sigue el patrón para el rol de administrador
-    const isAdmin = /.*adminCoder@coder\.com.*/i.test(newUser.email);
+        // Asigna el rol correspondiente
+        newUser.role = isAdmin ? "admin" : "user";
 
-    // Asigna el rol correspondiente
-    newUser.role = isAdmin ? "admin" : "user";
+        // Crea el usuario
+        // primero hasheo
+        newUser.password = createHash(req.body.password)
+        await UserModel.create(newUser);
 
-    // Crea el usuario
-    //primero hasheo
-    newUser.password = createHash(req.body.password)
-    await UserModel.create(newUser);
+        res.redirect('/login');
+    } catch (error) {
+        if (error.code && error.code === 11000) {
+            // Error de clave duplicada (correo electrónico ya en uso)
+            res.redirect('signup_email_failure')
+        } else {
+            // Otro tipo de error
+            console.error('Error al crear usuario:', error);
+            res.status(500).json({ error: 'Error interno del servidor' });
+        }
+    }
+});
 
-    res.redirect('/login');
+sessionrouter.get('/signup_email_failure',async  (req, res) => {
+    res.render('signup_email_failure')
 });
 
 sessionrouter.post('/login', async (req, res) => {

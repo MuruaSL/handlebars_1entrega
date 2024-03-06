@@ -3,6 +3,7 @@ body {
     margin: 0;
     padding: 0;
     background-color: #f0f0f0;
+    background-image: url('../img/fondo_difuminado_login.jpg');
 }
 
 .signup-container {
@@ -52,3 +53,4 @@ button[type="submit"] {
 button[type="submit"]:hover {
     background-color: #0056b3;
 }
+

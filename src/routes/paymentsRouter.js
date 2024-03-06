@@ -11,9 +11,9 @@ const client = new MercadoPagoConfig({ accessToken:access_token});
 const router = new Router()
 
 // auto return de mercado pago urls
-router.get('/success-payment', async (req, res) => {
-    res.render('success-payment');
-    });
+    router.get('/success-payment', async (req, res) => {
+        res.render('success-payment');
+        });
 
     router.get('/failure-payment', async (req, res) => {
         // Enviar correo electrónico de fallo
